@@ -1,0 +1,9 @@
+name: MoShields
+version: '${project.version}'
+main: dev.joeyfoxo.moshields.MoShields
+api-version: 1.19
+authors: [ Joeyfoxo ]
+depend:
+  - ProtocolLib
+description: Adds multiple shields to minecraft
+website: https://joeyfox.dev
