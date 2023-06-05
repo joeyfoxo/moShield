@@ -19,8 +19,6 @@ public class ObsidianShield extends Shield {
     NamespacedKey key;
     public static int maxDurability = 500;
 
-    public static NamespacedKey durabilityNameSpaceKey = new NamespacedKey(JavaPlugin.getPlugin(MoShields.class), "obsidian_durability");
-
     public ObsidianShield(ItemStack itemStack, Component title, NamespacedKey key) {
         super(itemStack, title, maxDurability);
         this.key = key;

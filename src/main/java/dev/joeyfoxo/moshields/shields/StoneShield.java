@@ -18,9 +18,7 @@ public class StoneShield extends Shield {
 
     NamespacedKey key;
 
-    static int maxDurability = 200;
-
-    public static NamespacedKey durabilityNameSpaceKey = new NamespacedKey(JavaPlugin.getPlugin(MoShields.class), "stone_durability");
+    public static int maxDurability = 200;
 
 
     public StoneShield(ItemStack itemStack, Component title, NamespacedKey key) {
