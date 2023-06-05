@@ -21,12 +21,8 @@ public abstract class Shield implements Listener {
 
     public Shield(ItemStack itemStack, Component title, int maxDurability) {
 
-        Bukkit.getPluginManager().registerEvents(this, JavaPlugin.getPlugin(MoShields.class));
-
-        this.itemStack = itemStack;
-        this.title = title;
+        this(itemStack, title);
         this.maxDurability = maxDurability;
-        features();
     }
 
     public ItemStack createShieldItem() {
