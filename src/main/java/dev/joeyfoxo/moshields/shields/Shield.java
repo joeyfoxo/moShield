@@ -45,8 +45,7 @@ public abstract class Shield implements Listener {
         int fakeDurability = Material.SHIELD.getMaxDurability();
 
         switch (UtilClass.getCustomModelEnum(meta)) {
-            case OBSIDIAN -> fakeDurability = UtilClass.getDurability(ObsidianShield.durabilityNameSpaceKey, meta);
-            case STONE -> fakeDurability = UtilClass.getDurability(StoneShield.durabilityNameSpaceKey, meta);
+
         }
 
         System.out.println(fakeDurability);

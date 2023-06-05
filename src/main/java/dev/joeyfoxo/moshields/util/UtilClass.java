@@ -67,14 +67,4 @@ public class UtilClass {
         }
         return -1;
     }
-
-    public static void setDurability(ItemMeta meta, NamespacedKey key, short durability) {
-        meta.getPersistentDataContainer().set(key, PersistentDataType.SHORT, durability);
-    }
-
-    public static int getDurability(NamespacedKey key, ItemMeta meta) {
-
-        return meta.getPersistentDataContainer().get(key, PersistentDataType.SHORT);
-
-    }
 }
