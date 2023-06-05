@@ -56,7 +56,6 @@ public class StoneShield extends Shield {
     void modifyMeta(ItemMeta meta) {
         meta.addEnchant(Enchantment.DAMAGE_ALL, 1, true);
         UtilClass.setCustomModelID(meta, key, ShieldType.STONE);
-        UtilClass.setDurability(meta, durabilityNameSpaceKey, fakeDurability);
 
     }
 

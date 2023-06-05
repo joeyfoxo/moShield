@@ -47,7 +47,6 @@ public class ObsidianShield extends Shield {
     void modifyMeta(ItemMeta meta) {
         meta.addEnchant(Enchantment.KNOCKBACK, 1, true);
         UtilClass.setCustomModelID(meta, key, ShieldType.OBSIDIAN);
-        UtilClass.setDurability(meta, durabilityNameSpaceKey, fakeDurability);
     }
 
 
