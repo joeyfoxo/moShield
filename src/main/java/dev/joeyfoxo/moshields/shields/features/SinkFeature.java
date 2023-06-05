@@ -41,9 +41,9 @@ public class SinkFeature implements Listener {
 
         //Check if the player should sink
 
-        if ((player.getInventory().getItemInOffHand().hasItemMeta()
+        if ((UtilClass.isCustomShield(player.getInventory().getItemInOffHand().getItemMeta())
                 && UtilClass.getCustomModelEnum(player.getInventory().getItemInOffHand().getItemMeta()) == ShieldType.OBSIDIAN)
-                || (player.getInventory().getItemInMainHand().hasItemMeta()
+                || (UtilClass.isCustomShield(player.getInventory().getItemInMainHand().getItemMeta())
                 && UtilClass.getCustomModelEnum(player.getInventory().getItemInMainHand().getItemMeta()) == ShieldType.OBSIDIAN)) {
             playersSinking.add(player.getUniqueId());
 

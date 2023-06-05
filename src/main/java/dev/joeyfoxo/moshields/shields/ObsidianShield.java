@@ -17,7 +17,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class ObsidianShield extends Shield {
 
     NamespacedKey key;
-    static int maxDurability = 500;
+    public static int maxDurability = 500;
 
     public static NamespacedKey durabilityNameSpaceKey = new NamespacedKey(JavaPlugin.getPlugin(MoShields.class), "obsidian_durability");
 

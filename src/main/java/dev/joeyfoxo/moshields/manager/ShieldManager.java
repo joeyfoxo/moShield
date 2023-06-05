@@ -1,6 +1,7 @@
 package dev.joeyfoxo.moshields.manager;
 
 import dev.joeyfoxo.moshields.MoShields;
+import dev.joeyfoxo.moshields.manager.events.DurabilityHandler;
 import dev.joeyfoxo.moshields.shields.ObsidianShield;
 import dev.joeyfoxo.moshields.shields.StoneShield;
 import net.kyori.adventure.text.Component;
@@ -15,6 +16,8 @@ public class ShieldManager {
     //TODO: Change durability Client Side
 
     public ShieldManager(MoShields main) {
+
+        new DurabilityHandler();
 
         new ObsidianShield(new ItemStack(Material.SHIELD),
                 Component.text().content("Obsidian Shield")
