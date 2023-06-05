@@ -19,14 +19,14 @@ public class ShieldManager {
         new ObsidianShield(new ItemStack(Material.SHIELD),
                 Component.text().content("Obsidian Shield")
                         .decoration(TextDecoration.ITALIC, false).build(),
-                new NamespacedKey(main, "obsidian_shield"), (short) 500);
+                new NamespacedKey(main, "obsidian_shield"));
 
 
         new StoneShield(new ItemStack(Material.SHIELD),
                 Component.text().content("Stone Shield")
                         //.color(TextColor.color(100, 100, 100))
                         .decoration(TextDecoration.ITALIC, false).build(),
-                new NamespacedKey(main, "stone_shield"), (short) 200);
+                new NamespacedKey(main, "stone_shield"));
 
 
 

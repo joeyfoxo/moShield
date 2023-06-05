@@ -17,14 +17,13 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class ObsidianShield extends Shield {
 
     NamespacedKey key;
-    short fakeDurability;
+    static int maxDurability = 500;
 
     public static NamespacedKey durabilityNameSpaceKey = new NamespacedKey(JavaPlugin.getPlugin(MoShields.class), "obsidian_durability");
 
-    public ObsidianShield(ItemStack itemStack, Component title, NamespacedKey key, short fakeDurability) {
-        super(itemStack, title);
+    public ObsidianShield(ItemStack itemStack, Component title, NamespacedKey key) {
+        super(itemStack, title, maxDurability);
         this.key = key;
-        this.fakeDurability = fakeDurability;
         createRecipe();
     }
 
