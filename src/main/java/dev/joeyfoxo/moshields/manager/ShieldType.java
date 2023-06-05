@@ -4,5 +4,6 @@ public enum ShieldType {
 
     OBSIDIAN,
     STONE,
+    GLASS,
 
 }

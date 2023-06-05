@@ -1,6 +1,7 @@
 package dev.joeyfoxo.moshields.manager.events;
 
 import dev.joeyfoxo.moshields.MoShields;
+import dev.joeyfoxo.moshields.shields.GlassShield;
 import dev.joeyfoxo.moshields.shields.ObsidianShield;
 import dev.joeyfoxo.moshields.shields.StoneShield;
 import dev.joeyfoxo.moshields.util.UtilClass;
@@ -44,6 +45,7 @@ public class DurabilityHandler implements Listener {
         int shieldMaxDurability = switch (UtilClass.getCustomModelEnum(meta)) {
             case OBSIDIAN -> ObsidianShield.maxDurability;
             case STONE -> StoneShield.maxDurability;
+            case GLASS -> GlassShield.maxDurability;
         };
 
         @NotNull PersistentDataContainer data = meta.getPersistentDataContainer();

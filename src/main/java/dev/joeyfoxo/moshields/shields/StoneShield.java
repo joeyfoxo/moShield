@@ -20,7 +20,6 @@ public class StoneShield extends Shield {
 
     public static int maxDurability = 200;
 
-
     public StoneShield(ItemStack itemStack, Component title, NamespacedKey key) {
         super(itemStack, title, maxDurability);
         this.key = key;
