@@ -1,7 +1,8 @@
-package dev.joeyfoxo.moshields.items.shields;
+package dev.joeyfoxo.moshields.shields;
 
 import dev.joeyfoxo.moshields.MoShields;
-import dev.joeyfoxo.moshields.items.data.ShieldType;
+import dev.joeyfoxo.moshields.manager.ShieldType;
+import dev.joeyfoxo.moshields.util.UtilClass;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -13,25 +14,25 @@ import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.lang.reflect.Field;
-
 public class StoneShield extends Shield {
 
+    NamespacedKey key;
 
-    public StoneShield(ItemStack itemStack, Component title, int UID, ShieldType shieldType) {
-        super(itemStack, title, UID, shieldType);
+    short fakeDurability;
+
+    public static NamespacedKey durabilityNameSpaceKey = new NamespacedKey(JavaPlugin.getPlugin(MoShields.class), "stone_durability");
+
+
+    public StoneShield(ItemStack itemStack, Component title, NamespacedKey key, short fakeDurability) {
+        super(itemStack, title);
+        this.key = key;
+        this.fakeDurability = fakeDurability;
         createRecipe();
     }
 
-    @Override
-    void features() {
-
-    }
-
-
     public void createRecipe() {
 
-        ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(JavaPlugin.getPlugin(MoShields.class), "stone_shield"), createShieldItem());
+        ShapedRecipe recipe = new ShapedRecipe(key, createShieldItem());
         recipe.shape("SIS", "SSS", " S ");
         recipe.setIngredient('S', new RecipeChoice.MaterialChoice(
                 Material.STONE,
@@ -46,14 +47,16 @@ public class StoneShield extends Shield {
     }
 
     @Override
-    void modifyMeta(ItemMeta meta) {
-
-        meta.addEnchant(Enchantment.DAMAGE_ALL, 1, true);
+    void features() {
 
     }
 
+
     @Override
-    void durabilitySize(Material item, Field durabilityField) {
+    void modifyMeta(ItemMeta meta) {
+        meta.addEnchant(Enchantment.DAMAGE_ALL, 1, true);
+        UtilClass.setCustomModelID(meta, key, ShieldType.STONE);
+        UtilClass.setDurability(meta, durabilityNameSpaceKey, fakeDurability);
 
     }
 

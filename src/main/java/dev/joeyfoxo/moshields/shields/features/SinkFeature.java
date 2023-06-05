@@ -1,7 +1,9 @@
-package dev.joeyfoxo.moshields.items.shields.features;
+package dev.joeyfoxo.moshields.shields.features;
 
 import dev.joeyfoxo.moshields.MoShields;
-import dev.joeyfoxo.moshields.items.shields.Shield;
+import dev.joeyfoxo.moshields.manager.ShieldType;
+import dev.joeyfoxo.moshields.shields.Shield;
+import dev.joeyfoxo.moshields.util.UtilClass;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -9,7 +11,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
 
@@ -33,34 +34,22 @@ public class SinkFeature implements Listener {
     public void onEnterWater(PlayerMoveEvent event) {
 
         Player player = event.getPlayer();
-        if (!player.isUnderWater()) {
+        if (!player.isUnderWater() || !player.isInWater()) {
             return;
         }
 
+
+        //Check if the player should sink
+
         if ((player.getInventory().getItemInOffHand().hasItemMeta()
-                && player.getInventory().getItemInOffHand().getItemMeta().getCustomModelData() == (shield.getItem().getItemMeta().getCustomModelData()))
+                && UtilClass.getCustomModelEnum(player.getInventory().getItemInOffHand().getItemMeta()) == ShieldType.OBSIDIAN)
                 || (player.getInventory().getItemInMainHand().hasItemMeta()
-                && player.getInventory().getItemInMainHand().getItemMeta().getCustomModelData() == (shield.getItem().getItemMeta().getCustomModelData()))) {
+                && UtilClass.getCustomModelEnum(player.getInventory().getItemInMainHand().getItemMeta()) == ShieldType.OBSIDIAN)) {
             playersSinking.add(player.getUniqueId());
 
         } else {
             playersSinking.remove(player.getUniqueId());
         }
-    }
-
-    @EventHandler
-    public void onDamage(EntityDamageByEntityEvent event) {
-
-        if (event.getEntity() instanceof  Player player) {
-
-            if (player.isBlocking()) {
-
-                System.out.println(player.getInventory().getItemInMainHand().getType().getMaxDurability());
-
-            }
-
-        }
-
     }
 
     private void sinkPlayer() {

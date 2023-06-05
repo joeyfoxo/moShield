@@ -1,8 +1,9 @@
-package dev.joeyfoxo.moshields.items.shields;
+package dev.joeyfoxo.moshields.shields;
 
 import dev.joeyfoxo.moshields.MoShields;
-import dev.joeyfoxo.moshields.items.data.ShieldType;
-import dev.joeyfoxo.moshields.items.shields.features.SinkFeature;
+import dev.joeyfoxo.moshields.manager.ShieldType;
+import dev.joeyfoxo.moshields.shields.features.SinkFeature;
+import dev.joeyfoxo.moshields.util.UtilClass;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -13,13 +14,17 @@ import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.lang.reflect.Field;
-
 public class ObsidianShield extends Shield {
 
+    NamespacedKey key;
+    short fakeDurability;
 
-    public ObsidianShield(ItemStack itemStack, Component title, int UID, ShieldType shieldType) {
-        super(itemStack, title, UID, shieldType);
+    public static NamespacedKey durabilityNameSpaceKey = new NamespacedKey(JavaPlugin.getPlugin(MoShields.class), "obsidian_durability");
+
+    public ObsidianShield(ItemStack itemStack, Component title, NamespacedKey key, short fakeDurability) {
+        super(itemStack, title);
+        this.key = key;
+        this.fakeDurability = fakeDurability;
         createRecipe();
     }
 
@@ -31,7 +36,7 @@ public class ObsidianShield extends Shield {
 
     public void createRecipe() {
 
-        ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(JavaPlugin.getPlugin(MoShields.class), "obsidian_shield"), createShieldItem());
+        ShapedRecipe recipe = new ShapedRecipe(key, createShieldItem());
         recipe.shape("OIO", "OOO", " O ");
         recipe.setIngredient('O', Material.OBSIDIAN);
         recipe.setIngredient('I', Material.IRON_INGOT);
@@ -41,14 +46,8 @@ public class ObsidianShield extends Shield {
     @Override
     void modifyMeta(ItemMeta meta) {
         meta.addEnchant(Enchantment.KNOCKBACK, 1, true);
-    }
-
-    @Override
-    void durabilitySize(Material item, Field durabilityField) {
-        try {
-            durabilityField.setShort(item, (short) 300);
-        }
-        catch (IllegalAccessException ignored) {}
+        UtilClass.setCustomModelID(meta, key, ShieldType.OBSIDIAN);
+        UtilClass.setDurability(meta, durabilityNameSpaceKey, fakeDurability);
     }
 
 

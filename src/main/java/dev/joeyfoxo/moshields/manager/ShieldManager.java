@@ -1,40 +1,32 @@
 package dev.joeyfoxo.moshields.manager;
 
-import dev.joeyfoxo.moshields.items.data.ShieldType;
-import dev.joeyfoxo.moshields.items.shields.ObsidianShield;
-import dev.joeyfoxo.moshields.items.shields.StoneShield;
-import dev.joeyfoxo.moshields.packet.ClientPacket;
+import dev.joeyfoxo.moshields.MoShields;
+import dev.joeyfoxo.moshields.shields.ObsidianShield;
+import dev.joeyfoxo.moshields.shields.StoneShield;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 
 public class ShieldManager {
 
 
-
     //TODO: Change durability Client Side
-    ClientPacket packet = new ClientPacket();
 
-    public ShieldManager() {
+    public ShieldManager(MoShields main) {
 
-        ObsidianShield obsidianShield = new ObsidianShield(new ItemStack(Material.SHIELD),
+        new ObsidianShield(new ItemStack(Material.SHIELD),
                 Component.text().content("Obsidian Shield")
-                        //.color(TextColor.color(19, 19, 19))
-                        .decoration(TextDecoration.ITALIC, false).build(), 1,
-                        //.decoration(TextDecoration.BOLD, true).build(), 1,
-                ShieldType.OBSIDIAN);
+                        .decoration(TextDecoration.ITALIC, false).build(),
+                new NamespacedKey(main, "obsidian_shield"), (short) 500);
 
 
-        StoneShield stoneShield =  new StoneShield(new ItemStack(Material.SHIELD),
+        new StoneShield(new ItemStack(Material.SHIELD),
                 Component.text().content("Stone Shield")
                         //.color(TextColor.color(100, 100, 100))
-                        .decoration(TextDecoration.ITALIC, false).build(), 0,
-                        //.decoration(TextDecoration.BOLD, true).build(), 0,
-                ShieldType.STONE);
-
-
-        //packet.customDurabilityRender(obsidianShield);
+                        .decoration(TextDecoration.ITALIC, false).build(),
+                new NamespacedKey(main, "stone_shield"), (short) 200);
 
 
 

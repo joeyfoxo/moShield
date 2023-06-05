@@ -7,7 +7,7 @@ public final class MoShields extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        new ShieldManager();
+        new ShieldManager(this);
 
     }
 
