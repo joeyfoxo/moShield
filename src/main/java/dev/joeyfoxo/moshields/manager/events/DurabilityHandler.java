@@ -1,7 +1,6 @@
 package dev.joeyfoxo.moshields.manager.events;
 
 import dev.joeyfoxo.moshields.MoShields;
-import dev.joeyfoxo.moshields.shields.GlassShield;
 import dev.joeyfoxo.moshields.shields.ObsidianShield;
 import dev.joeyfoxo.moshields.shields.StoneShield;
 import dev.joeyfoxo.moshields.util.UtilClass;
@@ -45,27 +44,22 @@ public class DurabilityHandler implements Listener {
         int shieldMaxDurability = switch (UtilClass.getCustomModelEnum(meta)) {
             case OBSIDIAN -> ObsidianShield.maxDurability;
             case STONE -> StoneShield.maxDurability;
-            case GLASS -> GlassShield.maxDurability;
         };
 
         @NotNull PersistentDataContainer data = meta.getPersistentDataContainer();
         int shieldCurDurability;
-        if (data.has(ShieldDurabilityNamespace)) {
-            shieldCurDurability = meta.getPersistentDataContainer().get(ShieldDurabilityNamespace, PersistentDataType.INTEGER);
-        } else {
-            System.err.println("NBT MISSING");
+        if (!data.has(ShieldDurabilityNamespace)) {
             return;
         }
+        shieldCurDurability = meta.getPersistentDataContainer().get(ShieldDurabilityNamespace, PersistentDataType.INTEGER);
 
-        int damageTaken = event.getOriginalDamage(); // This line
-        int shieldNewDurability = shieldCurDurability - damageTaken;
+        int shieldNewDurability = shieldCurDurability - event.getOriginalDamage();
 
         // set Shield durability nbt
         meta.getPersistentDataContainer().set(ShieldDurabilityNamespace, PersistentDataType.INTEGER, shieldNewDurability);
 
         float rawShieldExpectedDamage = ((1 - (float) shieldNewDurability / shieldMaxDurability)) * Material.SHIELD.getMaxDurability(); //gives the wanted durability of the shield
         int damageToShield = (int) Math.floor(rawShieldExpectedDamage - meta.getDamage());
-
         event.setDamage(damageToShield); // Should break shield if shield is negative
 
         meta.lore(List.of(Component.text().content(" ").build(), Component.text()

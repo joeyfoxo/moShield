@@ -2,14 +2,12 @@ package dev.joeyfoxo.moshields.shields.features;
 
 import dev.joeyfoxo.moshields.MoShields;
 import dev.joeyfoxo.moshields.manager.ShieldType;
-import dev.joeyfoxo.moshields.shields.Shield;
 import dev.joeyfoxo.moshields.util.UtilClass;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
@@ -22,10 +20,11 @@ public class SinkFeature implements Listener {
 
     Set<UUID> playersSinking = new HashSet<>();
 
-    Shield shield;
-    public SinkFeature(Shield shield) {
+    ShieldType shieldType;
+
+    public SinkFeature(ShieldType shieldType) {
         Bukkit.getPluginManager().registerEvents(this, JavaPlugin.getPlugin(MoShields.class));
-        this.shield = shield;
+        this.shieldType = shieldType;
         sinkPlayer();
 
     }
@@ -41,10 +40,7 @@ public class SinkFeature implements Listener {
 
         //Check if the player should sink
 
-        if ((UtilClass.isCustomShield(player.getInventory().getItemInOffHand().getItemMeta())
-                && UtilClass.getCustomModelEnum(player.getInventory().getItemInOffHand().getItemMeta()) == ShieldType.OBSIDIAN)
-                || (UtilClass.isCustomShield(player.getInventory().getItemInMainHand().getItemMeta())
-                && UtilClass.getCustomModelEnum(player.getInventory().getItemInMainHand().getItemMeta()) == ShieldType.OBSIDIAN)) {
+        if (UtilClass.isCorrectShield(player, shieldType)) {
             playersSinking.add(player.getUniqueId());
 
         } else {

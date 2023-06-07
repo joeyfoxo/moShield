@@ -1,62 +1,71 @@
 package dev.joeyfoxo.moshields.shields.features;
 
 import dev.joeyfoxo.moshields.MoShields;
+import dev.joeyfoxo.moshields.manager.ShieldType;
+import dev.joeyfoxo.moshields.util.UtilClass;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.player.PlayerItemDamageEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.Vector;
 
 public class ReflectFeature implements Listener {
+    boolean reflectMagic;
+    boolean reflectProjectiles;
 
-    static int reflectCost = 10;
-    boolean reflectMagic = false;
-    boolean reflectProjectiles = false;
+    ShieldType shieldType;
 
-    public ReflectFeature(boolean reflectMagic, boolean reflectProjectiles) {
+    public ReflectFeature(boolean reflectMagic, boolean reflectProjectiles, ShieldType shieldType) {
         Bukkit.getPluginManager().registerEvents(this, JavaPlugin.getPlugin(MoShields.class));
         this.reflectMagic = reflectMagic;
         this.reflectProjectiles = reflectProjectiles;
-
+        this.shieldType = shieldType;
     }
 
     @EventHandler
     public void onAttemptedDamage(EntityDamageByEntityEvent event) {
-        if (event.getEntity() instanceof Player player) {
-            if (player.isBlocking()) {
-                if (reflectProjectiles && event.getDamager() instanceof Projectile projectile) {
-                    event.setCancelled(true);
-                    reflectProjectile(player, projectile, event);
-                }
+        if (event.getEntity() instanceof Player player && player.isBlocking()) {
+
+            if (!UtilClass.isCorrectShield(player, shieldType)) {
+                return;
+            }
+
+            if (event.getDamager() instanceof Projectile projectile && reflectProjectiles) {
+                reflectProjectile(player, projectile);
+            }
+
+            if (event.getCause() == EntityDamageEvent.DamageCause.SONIC_BOOM) {
+
+
             }
         }
+
+
     }
 
-    private void reflectProjectile(Player player, Projectile projectile, EntityDamageByEntityEvent event) {
-        ProjectileSource shooter = projectile.getShooter();
+    private void reflectProjectile(Player player, Projectile projectile) {
+        Entity entity = (Entity) projectile.getShooter();
+        Location location = entity.getLocation();
+        projectile.remove();
+        player.launchProjectile(projectile.getClass()).setVelocity(getReflectedVector(player.getLocation(), location));
 
-        if (shooter instanceof Entity shooterEntity) {
-            PlayerItemDamageEvent itemDamageEvent = new PlayerItemDamageEvent(player, player.getActiveItem(), reflectCost);
-            Bukkit.getPluginManager().callEvent(itemDamageEvent);
 
-            Vector direction = projectile.getVelocity().normalize();
-            double angle = player.getLocation().getDirection().angle(direction);
-
-            Vector newVelocity = direction.clone().multiply(-1).rotateAroundY(Math.toRadians(angle));
-            System.out.println(newVelocity);
-
-            projectile.setVelocity(newVelocity);
-        }
     }
 
     private void reflectMagic() {
 
+
+    }
+
+    private Vector getReflectedVector(Location playerLoc, Location entityLoc) {
+
+        return entityLoc.subtract(playerLoc).toVector().add(new Vector(0, 1, 0)).normalize();
 
     }
 }

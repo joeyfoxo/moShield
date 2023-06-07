@@ -51,9 +51,13 @@ public class StoneShield extends Shield {
     @Override
     void modifyMeta(ItemMeta meta) {
         meta.addEnchant(Enchantment.DAMAGE_ALL, 1, true);
-        UtilClass.setCustomModelID(meta, key, ShieldType.STONE);
+        UtilClass.setCustomModelID(meta, key, getShieldType());
 
     }
 
 
+    @Override
+    public ShieldType getShieldType() {
+        return ShieldType.STONE;
+    }
 }

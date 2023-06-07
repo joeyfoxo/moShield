@@ -1,6 +1,7 @@
 package dev.joeyfoxo.moshields.shields;
 
 import dev.joeyfoxo.moshields.MoShields;
+import dev.joeyfoxo.moshields.manager.ShieldType;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
@@ -10,7 +11,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public abstract class Shield implements Listener {
+public abstract class Shield implements Listener, ShieldTypeRequirement {
 
     ItemStack itemStack;
     Component title;
@@ -42,10 +43,6 @@ public abstract class Shield implements Listener {
         itemStack.setItemMeta(meta);
         return itemStack;
 
-    }
-
-    public ItemStack getItem() {
-        return itemStack;
     }
 
     abstract void features();

@@ -2,7 +2,7 @@ package dev.joeyfoxo.moshields.util;
 
 import dev.joeyfoxo.moshields.manager.ShieldType;
 import org.bukkit.NamespacedKey;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
@@ -36,36 +36,53 @@ public class UtilClass {
 
     public static boolean isCustomShield(ItemMeta meta) {
 
-        Set<NamespacedKey> keys = meta.getPersistentDataContainer().getKeys();
-        for (NamespacedKey key : keys) {
-            Integer ordinalType = getCustomModelID(meta, key);
-            if (ordinalType == null) {
-                return false;
-            }
-            for (ShieldType types : ShieldType.values()) {
-                if (types.ordinal() == ordinalType) {
-                    return true;
-                }
-            }
-        }
-        return false;
+//        Set<NamespacedKey> keys = meta.getPersistentDataContainer().getKeys();
+//        for (NamespacedKey key : keys) {
+//            Integer ordinalType = getCustomModelID(meta, key);
+//            if (ordinalType == null) {
+//                return false;
+//            }
+//            for (ShieldType types : ShieldType.values()) {
+//                if (types.ordinal() == ordinalType) {
+//                    return true;
+//                }
+//            }
+//        }
+//        return false;
+
+        return getCustomModelEnum(meta) != null;
     }
 
     public static int getOrdinal(ItemMeta meta) {
 
-        Set<NamespacedKey> keys = meta.getPersistentDataContainer().getKeys();
-        for (NamespacedKey key : keys) {
-            Integer ordinalType = getCustomModelID(meta, key);
+        if (meta != null) {
+            Set<NamespacedKey> keys = meta.getPersistentDataContainer().getKeys();
+            for (NamespacedKey key : keys) {
+                Integer ordinalType = getCustomModelID(meta, key);
 
-            if (ordinalType == null) {
-                return -1;
-            }
-            for (ShieldType types : ShieldType.values()) {
-                if (types.ordinal() == ordinalType) {
-                    return ordinalType;
+                if (ordinalType == null) {
+                    return -1;
+                }
+                for (ShieldType types : ShieldType.values()) {
+                    if (types.ordinal() == ordinalType) {
+                        return ordinalType;
+                    }
                 }
             }
         }
         return -1;
+    }
+
+    public static boolean isCorrectShield(Player player, ShieldType type) {
+
+
+        if (UtilClass.isCustomShield(player.getInventory().getItemInOffHand().getItemMeta())) {
+            return UtilClass.getCustomModelEnum(player.getInventory().getItemInOffHand().getItemMeta()) == type;
+        }
+
+        if (UtilClass.isCustomShield(player.getInventory().getItemInMainHand().getItemMeta())) {
+            return UtilClass.getCustomModelEnum(player.getInventory().getItemInMainHand().getItemMeta()) == type;
+        }
+        return false;
     }
 }
