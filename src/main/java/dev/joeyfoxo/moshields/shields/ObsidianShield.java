@@ -1,8 +1,7 @@
 package dev.joeyfoxo.moshields.shields;
 
 import dev.joeyfoxo.moshields.manager.ShieldType;
-import dev.joeyfoxo.moshields.shields.features.ReflectFeature;
-import dev.joeyfoxo.moshields.shields.features.SinkFeature;
+import dev.joeyfoxo.moshields.shields.features.Features;
 import dev.joeyfoxo.moshields.util.UtilClass;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -21,17 +20,12 @@ public class ObsidianShield extends Shield {
     public ObsidianShield(ItemStack itemStack, Component title, NamespacedKey key) {
         super(itemStack, title, maxDurability);
         this.key = key;
-        createRecipe();
+
     }
+
 
     @Override
-    void features() {
-        new SinkFeature(getShieldType());
-        new ReflectFeature(true, true, getShieldType());
-    }
-
-
-    public void createRecipe() {
+     void createRecipe() {
 
         ShapedRecipe recipe = new ShapedRecipe(key, createShieldItem());
         recipe.shape("OIO", "OOO", " O ");
@@ -46,9 +40,16 @@ public class ObsidianShield extends Shield {
         UtilClass.setCustomModelID(meta, key, getShieldType());
     }
 
+    @Override
+    void shieldAbilities() {
+        Features.addSinkableShield(getShieldType());
+    }
+
 
     @Override
     public ShieldType getShieldType() {
         return ShieldType.OBSIDIAN;
     }
+
+
 }

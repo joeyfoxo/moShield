@@ -1,6 +1,8 @@
 package dev.joeyfoxo.moshields.util;
 
 import dev.joeyfoxo.moshields.manager.ShieldType;
+import dev.joeyfoxo.moshields.shields.features.interactive.ReflectFeature;
+import dev.joeyfoxo.moshields.shields.features.passive.SinkFeature;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -34,21 +36,13 @@ public class UtilClass {
         return null;
     }
 
-    public static boolean isCustomShield(ItemMeta meta) {
+    public static boolean isHoldingCustomShield(Player player) {
 
-//        Set<NamespacedKey> keys = meta.getPersistentDataContainer().getKeys();
-//        for (NamespacedKey key : keys) {
-//            Integer ordinalType = getCustomModelID(meta, key);
-//            if (ordinalType == null) {
-//                return false;
-//            }
-//            for (ShieldType types : ShieldType.values()) {
-//                if (types.ordinal() == ordinalType) {
-//                    return true;
-//                }
-//            }
-//        }
-//        return false;
+        return (getCustomModelEnum(player.getInventory().getItemInMainHand().getItemMeta()) != null)
+                || (getCustomModelEnum(player.getInventory().getItemInOffHand().getItemMeta()) != null);
+    }
+
+    public static boolean isHoldingCustomShield(ItemMeta meta) {
 
         return getCustomModelEnum(meta) != null;
     }
@@ -76,13 +70,14 @@ public class UtilClass {
     public static boolean isCorrectShield(Player player, ShieldType type) {
 
 
-        if (UtilClass.isCustomShield(player.getInventory().getItemInOffHand().getItemMeta())) {
+        if (UtilClass.isHoldingCustomShield(player.getInventory().getItemInOffHand().getItemMeta())) {
             return UtilClass.getCustomModelEnum(player.getInventory().getItemInOffHand().getItemMeta()) == type;
         }
 
-        if (UtilClass.isCustomShield(player.getInventory().getItemInMainHand().getItemMeta())) {
+        if (UtilClass.isHoldingCustomShield(player.getInventory().getItemInMainHand().getItemMeta())) {
             return UtilClass.getCustomModelEnum(player.getInventory().getItemInMainHand().getItemMeta()) == type;
         }
         return false;
     }
+
 }

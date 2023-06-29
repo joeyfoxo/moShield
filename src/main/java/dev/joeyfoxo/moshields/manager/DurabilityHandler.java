@@ -1,4 +1,4 @@
-package dev.joeyfoxo.moshields.manager.events;
+package dev.joeyfoxo.moshields.manager;
 
 import dev.joeyfoxo.moshields.MoShields;
 import dev.joeyfoxo.moshields.shields.ObsidianShield;
@@ -34,7 +34,7 @@ public class DurabilityHandler implements Listener {
     @EventHandler
     public void getDurabilityChange(PlayerItemDamageEvent event) {
 
-        if (!UtilClass.isCustomShield(event.getItem().getItemMeta())) {
+        if (!UtilClass.isHoldingCustomShield(event.getItem().getItemMeta())) {
             return;
         }
 

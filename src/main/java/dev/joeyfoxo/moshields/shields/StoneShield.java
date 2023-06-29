@@ -2,6 +2,7 @@ package dev.joeyfoxo.moshields.shields;
 
 import dev.joeyfoxo.moshields.MoShields;
 import dev.joeyfoxo.moshields.manager.ShieldType;
+import dev.joeyfoxo.moshields.shields.features.Features;
 import dev.joeyfoxo.moshields.util.UtilClass;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -23,10 +24,10 @@ public class StoneShield extends Shield {
     public StoneShield(ItemStack itemStack, Component title, NamespacedKey key) {
         super(itemStack, title, maxDurability);
         this.key = key;
-        createRecipe();
     }
 
-    public void createRecipe() {
+    @Override
+    void createRecipe() {
 
         ShapedRecipe recipe = new ShapedRecipe(key, createShieldItem());
         recipe.shape("SIS", "SSS", " S ");
@@ -37,14 +38,7 @@ public class StoneShield extends Shield {
                 Material.SMOOTH_STONE));
 
         recipe.setIngredient('I', Material.IRON_INGOT);
-
-
         Bukkit.addRecipe(recipe);
-    }
-
-    @Override
-    void features() {
-
     }
 
 
@@ -55,6 +49,12 @@ public class StoneShield extends Shield {
 
     }
 
+    @Override
+    void shieldAbilities() {
+
+        Features.addReflectionShield(getShieldType());
+
+    }
 
     @Override
     public ShieldType getShieldType() {

@@ -1,7 +1,6 @@
 package dev.joeyfoxo.moshields.manager;
 
 import dev.joeyfoxo.moshields.MoShields;
-import dev.joeyfoxo.moshields.manager.events.DurabilityHandler;
 import dev.joeyfoxo.moshields.shields.ObsidianShield;
 import dev.joeyfoxo.moshields.shields.StoneShield;
 import net.kyori.adventure.text.Component;
@@ -30,7 +29,6 @@ public class ShieldManager {
                         //.color(TextColor.color(100, 100, 100))
                         .decoration(TextDecoration.ITALIC, false).build(),
                 new NamespacedKey(main, "stone_shield"));
-
 
     }
 
