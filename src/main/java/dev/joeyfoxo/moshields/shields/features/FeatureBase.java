@@ -3,6 +3,7 @@ package dev.joeyfoxo.moshields.shields.features;
 import dev.joeyfoxo.moshields.MoShields;
 import dev.joeyfoxo.moshields.util.UtilClass;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
@@ -24,7 +25,7 @@ public abstract class FeatureBase implements Listener {
             if (!UtilClass.isHoldingCustomShield(player.getActiveItem().getItemMeta())) {
                 return;
             }
-            eventBasedFeature();
+            eventBasedFeature(player);
             if (event.getDamager() instanceof Projectile projectile) {
                 eventBasedFeature(player, projectile);
             }
@@ -33,7 +34,7 @@ public abstract class FeatureBase implements Listener {
 
     }
 
-    protected abstract void eventBasedFeature();
+    protected abstract void eventBasedFeature(Player player);
 
     public abstract void eventBasedFeature(Player player, Projectile projectile);
 

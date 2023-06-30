@@ -9,6 +9,7 @@ public record Features() {
 
     private static final Set<ShieldType> sinkableShields = new HashSet<>();
     private static final Set<ShieldType> reflectionShields = new HashSet<>();
+    private static final Set<ShieldType> circularProtectShields = new HashSet<>();
 
     public static Set<ShieldType> getSinkableShields() {
         return sinkableShields;
@@ -17,11 +18,19 @@ public record Features() {
         return reflectionShields;
     }
 
+    public static Set<ShieldType> getCircularProtectShields() {
+        return circularProtectShields;
+    }
+
     public static void addSinkableShield(ShieldType shieldType) {
         sinkableShields.add(shieldType);
     }
 
     public static void addReflectionShield(ShieldType shieldType) {
         reflectionShields.add(shieldType);
+    }
+
+    public static void addCircularProtectShield(ShieldType shieldType) {
+        circularProtectShields.add(shieldType);
     }
 }

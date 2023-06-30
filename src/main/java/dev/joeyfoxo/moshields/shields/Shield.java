@@ -22,7 +22,6 @@ public abstract class Shield implements ShieldTypeRequirement {
         this.title = title;
         this.maxDurability = maxDurability;
         shieldAbilities();
-        createRecipe();
     }
 
     public ItemStack createShieldItem() {
@@ -40,7 +39,5 @@ public abstract class Shield implements ShieldTypeRequirement {
     abstract void modifyMeta(ItemMeta meta);
 
     abstract void shieldAbilities();
-
-    abstract void createRecipe();
 
 }

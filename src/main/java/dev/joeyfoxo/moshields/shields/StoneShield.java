@@ -24,9 +24,9 @@ public class StoneShield extends Shield {
     public StoneShield(ItemStack itemStack, Component title, NamespacedKey key) {
         super(itemStack, title, maxDurability);
         this.key = key;
+        createRecipe();
     }
 
-    @Override
     void createRecipe() {
 
         ShapedRecipe recipe = new ShapedRecipe(key, createShieldItem());

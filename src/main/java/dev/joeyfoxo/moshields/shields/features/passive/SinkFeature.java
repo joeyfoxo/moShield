@@ -28,7 +28,7 @@ public class SinkFeature extends FeatureBase implements Listener {
     }
 
     @Override
-    protected void eventBasedFeature() {
+    protected void eventBasedFeature(Player player) {
 
     }
 

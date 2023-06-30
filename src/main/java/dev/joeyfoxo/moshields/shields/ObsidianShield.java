@@ -20,11 +20,11 @@ public class ObsidianShield extends Shield {
     public ObsidianShield(ItemStack itemStack, Component title, NamespacedKey key) {
         super(itemStack, title, maxDurability);
         this.key = key;
+        createRecipe();
 
     }
 
 
-    @Override
      void createRecipe() {
 
         ShapedRecipe recipe = new ShapedRecipe(key, createShieldItem());
@@ -43,6 +43,7 @@ public class ObsidianShield extends Shield {
     @Override
     void shieldAbilities() {
         Features.addSinkableShield(getShieldType());
+        Features.addCircularProtectShield(getShieldType());
     }
 
 
