@@ -1,7 +1,5 @@
-package dev.joeyfoxo.moshields.shields.features.interactive;
+package dev.joeyfoxo.moshields.shields.features;
 
-import dev.joeyfoxo.moshields.shields.features.FeatureBase;
-import dev.joeyfoxo.moshields.shields.features.Features;
 import dev.joeyfoxo.moshields.util.UtilClass;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -9,20 +7,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.util.Vector;
 
-public class ReflectFeature extends FeatureBase {
+import static dev.joeyfoxo.moshields.manager.CooldownManager.applyCooldownToShield;
 
+public class ReflectFeature {
 
-    private Vector getReflectedVector(Location playerLoc, Location entityLoc) {
-        return entityLoc.subtract(playerLoc).toVector().add(new Vector(0, 1, 0)).normalize();
-    }
+    int cooldown = 60;
 
-    @Override
-    protected void eventBasedFeature(Player player) {
-
-    }
-
-    public void eventBasedFeature(Player player, Projectile projectile) {
-
+    public void reflectArrow(Player player, Projectile projectile) {
         if (Features.getReflectionShields().contains(
                 UtilClass.getCustomModelEnum(player.getActiveItem().getItemMeta()))) {
             Entity entity = (Entity) projectile.getShooter();
@@ -32,8 +23,10 @@ public class ReflectFeature extends FeatureBase {
         }
     }
 
-    @Override
-    public void feature() {
 
+
+    private Vector getReflectedVector(Location playerLoc, Location entityLoc) {
+        return entityLoc.subtract(playerLoc).toVector().add(new Vector(0, 1, 0)).normalize();
     }
+
 }

@@ -11,12 +11,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class ShieldManager {
 
-
-    //TODO: Change durability Client Side
-
     public ShieldManager(MoShields main) {
-
-        new DurabilityHandler();
 
         new ObsidianShield(new ItemStack(Material.SHIELD),
                 Component.text().content("Obsidian Shield")

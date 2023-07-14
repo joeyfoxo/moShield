@@ -2,8 +2,7 @@ package dev.joeyfoxo.moshields.shields.features;
 
 import dev.joeyfoxo.moshields.manager.ShieldType;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public record Features() {
 
@@ -11,9 +10,12 @@ public record Features() {
     private static final Set<ShieldType> reflectionShields = new HashSet<>();
     private static final Set<ShieldType> circularProtectShields = new HashSet<>();
 
+    public static final Set<UUID> playersSinking = new HashSet<>();
+
     public static Set<ShieldType> getSinkableShields() {
         return sinkableShields;
     }
+
     public static Set<ShieldType> getReflectionShields() {
         return reflectionShields;
     }
