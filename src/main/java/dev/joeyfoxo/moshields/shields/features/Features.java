@@ -1,60 +1,55 @@
 package dev.joeyfoxo.moshields.shields.features;
 
+import dev.joeyfoxo.moshields.exception.InvalidAbilityException;
+import dev.joeyfoxo.moshields.exception.MultipleSpecialAbilitiesException;
 import dev.joeyfoxo.moshields.manager.ShieldType;
 
 import java.util.*;
 
 public record Features() {
 
-    private static final HashMap<UUID, Abilities> activeAbilityMap = new HashMap<>();
-    private static final Set<ShieldType> sinkableShields = new HashSet<>();
-    private static final Set<ShieldType> reflectionShields = new HashSet<>();
-    private static final Set<ShieldType> circleInvulnerabilityShields = new HashSet<>();
-    private static final Set<ShieldType> trackingReflectionShields = new HashSet<>();
+    private static final HashMap<UUID, Abilities> activeSpecialAbilityMap = new HashMap<>();
+    private static final HashMap<ShieldType, Set<Abilities>> shieldAbilityMap = new HashMap<>();
 
     public static final Set<UUID> playersSinking = new HashSet<>();
 
-    public static Set<ShieldType> getSinkableShields() {
-        return sinkableShields;
+    public static Set<Abilities> getShieldAbilities(ShieldType shieldType) {
+        return shieldAbilityMap.get(shieldType);
     }
 
-    public static Set<ShieldType> getReflectionShields() {
-        return reflectionShields;
-    }
+    public static void addShieldAbility(ShieldType shieldType, Abilities... ability) {
 
-    public static Set<ShieldType> getCircleInvulnerabilityShields() {
-        return circleInvulnerabilityShields;
-    }
+        for (Abilities abilities : ability) {
 
-    public static Set<ShieldType> getTrackingReflectionShields() {
-        return trackingReflectionShields;
-    }
-
-    public static void addSinkableShield(ShieldType shieldType) {
-        sinkableShields.add(shieldType);
-    }
-
-    public static void addReflectionShield(ShieldType shieldType) {
-        reflectionShields.add(shieldType);
-    }
-
-    public static void addCircularProtectShield(ShieldType shieldType) {
-        circleInvulnerabilityShields.add(shieldType);
-    }
-    public static void addTrackingReflectionShields(ShieldType shieldType) {
-        trackingReflectionShields.add(shieldType);
-    }
+            if (!(Arrays.stream(Abilities.values()).toList().contains(abilities))) {
+                throw new InvalidAbilityException(abilities.name() + " isn't a valid ability");
+            }
 
 
-    public static HashMap<UUID, Abilities> getActiveAbilityMap() {
-        return activeAbilityMap;
+            if (shieldAbilityMap.containsKey(shieldType)) {
+                int i = 0;
+                for (Abilities abilitiesInMap : getShieldAbilities(shieldType)) {
+                    if (abilitiesInMap.isSpecialAbility) {
+                        i++;
+                    }
+                }
+                if (i > 1) {
+                    throw new MultipleSpecialAbilitiesException("A Shield can only have 1 special ability");
+                }
+
+                getShieldAbilities(shieldType).add(abilities);
+            } else {
+                shieldAbilityMap.put(shieldType, Set.of(abilities));
+            }
+        }
     }
 
-    public static boolean hasActiveAbility(UUID uuid) {
-        return getActiveAbilityMap().containsKey(uuid);
+
+    public static HashMap<UUID, Abilities> getActiveSpecialAbilityMap() {
+        return activeSpecialAbilityMap;
     }
 
-    public static void setActiveAbility(UUID uuid, Abilities ability) {
-        getActiveAbilityMap().put(uuid, ability);
+    public static void setActiveSpecialAbility(UUID uuid, Abilities ability) {
+        getActiveSpecialAbilityMap().put(uuid, ability);
     }
 }

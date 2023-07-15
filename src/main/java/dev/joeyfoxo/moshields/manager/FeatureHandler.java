@@ -1,6 +1,7 @@
 package dev.joeyfoxo.moshields.manager;
 
 import dev.joeyfoxo.moshields.MoShields;
+import dev.joeyfoxo.moshields.shields.features.Abilities;
 import dev.joeyfoxo.moshields.shields.features.Features;
 import dev.joeyfoxo.moshields.shields.features.ReflectFeature;
 import dev.joeyfoxo.moshields.shields.features.SinkFeature;
@@ -18,8 +19,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.Set;
-
+import static dev.joeyfoxo.moshields.shields.features.Features.getShieldAbilities;
 import static dev.joeyfoxo.moshields.shields.features.Features.playersSinking;
 
 public class FeatureHandler implements Listener {
@@ -27,7 +27,6 @@ public class FeatureHandler implements Listener {
     SinkFeature sinkFeature = new SinkFeature();
     ReflectFeature reflectFeature = new ReflectFeature();
     CircleInvulnerabilityFeature circleInvulnerabilityFeature = new CircleInvulnerabilityFeature();
-
     TrackingReflectFeature trackingReflectFeature = new TrackingReflectFeature();
 
     public FeatureHandler() {
@@ -39,35 +38,28 @@ public class FeatureHandler implements Listener {
     public void onAttemptedDamage(EntityDamageByEntityEvent event) {
 
         if (event.getEntity() instanceof Player player) {
-            Set<ShieldType> shieldTypes = UtilClass.getHeldShields(player);
+
 
             if (!UtilClass.isHoldingCustomShield(player)) {
                 return;
             }
-            for (ShieldType type : shieldTypes) {
+            for (ShieldType heldShield : UtilClass.getHeldShields(player)) {
 
-                if (player.isBlocking()) {
-                    if (event.getDamager() instanceof Projectile projectile
-                            && Features.getReflectionShields()
-                            .contains(type)) {
-                        reflectFeature.reflectArrow(player, projectile);
-                    }
-                    if (Features.hasActiveAbility(player.getUniqueId())) {
+                for (Abilities abilities : getShieldAbilities(heldShield)) {
 
-                        switch (Features.getActiveAbilityMap().get(player.getUniqueId())) {
-                            case TRACKING_REFLECT -> trackingReflectFeature.performAbility(event);
+                    if (player.isBlocking()) {
+
+                        switch (abilities) {
+                            case REFLECT -> {
+                                if (event.getDamager() instanceof Projectile projectile) {
+                                    reflectFeature.reflectArrow(player, projectile);
+                                }
+                            }
+                            case PROJECTILE_TRACKING_REFLECTION -> {
+                                trackingReflectFeature.performAbility(event);
+                            }
                         }
-
-
                     }
-
-                }
-                //Some shields if they have abilities don't need to be blocking
-                if (Features.hasActiveAbility(player.getUniqueId())) {
-                    switch (Features.getActiveAbilityMap().get(player.getUniqueId())) {
-                        case CIRCLE_PROTECT -> circleInvulnerabilityFeature.performAbility(event);
-                    }
-
 
                 }
 
@@ -85,17 +77,15 @@ public class FeatureHandler implements Listener {
             return;
         }
 
-
         if (player.isSneaking() && event.getAction().isRightClick()) {
-            for (ShieldType shieldType : UtilClass.getHeldShields(player)) {
-                if (Features.getCircleInvulnerabilityShields().contains(shieldType)) {
-                    circleInvulnerabilityFeature.activateAbility(player);
+            for (ShieldType heldShield : UtilClass.getHeldShields(player)) {
+                Features.getShieldAbilities(heldShield).stream().filter(Abilities::isSpecialAbility).forEach(ability -> {
+                    switch (ability) {
+                        case CIRCULAR_PROTECTION -> circleInvulnerabilityFeature.activateAbility(player);
+                        case PROJECTILE_TRACKING_REFLECTION -> trackingReflectFeature.activateAbility(player);
+                    }
 
-                }
-
-                if (Features.getTrackingReflectionShields().contains(shieldType)) {
-                    trackingReflectFeature.activateAbility(player);
-                }
+                });
             }
         }
 
@@ -114,7 +104,7 @@ public class FeatureHandler implements Listener {
         }
 
         for (ShieldType shieldType : UtilClass.getHeldShields(player)) {
-            if (Features.getSinkableShields().contains(shieldType)) {
+            if (Features.getShieldAbilities(shieldType).contains(Abilities.SINK)) {
                 playersSinking.add(player.getUniqueId());
             }
 

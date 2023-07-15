@@ -1,6 +1,7 @@
 package dev.joeyfoxo.moshields.shields;
 
 import dev.joeyfoxo.moshields.manager.ShieldType;
+import dev.joeyfoxo.moshields.shields.features.Abilities;
 import dev.joeyfoxo.moshields.shields.features.Features;
 import dev.joeyfoxo.moshields.util.UtilClass;
 import net.kyori.adventure.text.Component;
@@ -44,8 +45,7 @@ public class ObsidianShield extends Shield {
     void shieldAbilities() {
 
         //SHIELD CAN ONLY HAVE 1 Active special ability
-        Features.addSinkableShield(getShieldType());
-        Features.addTrackingReflectionShields(getShieldType());
+        Features.addShieldAbility(getShieldType(), Abilities.SINK, Abilities.PROJECTILE_TRACKING_REFLECTION);
     }
 
 

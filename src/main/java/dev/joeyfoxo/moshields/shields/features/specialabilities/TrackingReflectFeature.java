@@ -33,7 +33,7 @@ public class TrackingReflectFeature {
                 return;
             }
 
-            Features.setActiveAbility(player.getUniqueId(), Abilities.TRACKING_REFLECT);
+            Features.setActiveSpecialAbility(player.getUniqueId(), Abilities.PROJECTILE_TRACKING_REFLECTION);
             applyCooldownToShield(player,
                     type, cooldown);
 
@@ -48,9 +48,7 @@ public class TrackingReflectFeature {
                 && event.getDamager() instanceof Projectile projectile
                 && projectile.getShooter() instanceof Entity entity) {
 
-
             Projectile spawnedProjectile =  player.launchProjectile(projectile.getClass());
-
             Bukkit.getScheduler().runTaskTimer(JavaPlugin.getPlugin(MoShields.class), () -> {
 
                 Location projectileLocation = spawnedProjectile.getLocation();
@@ -60,7 +58,7 @@ public class TrackingReflectFeature {
 
             }, 0, 1);
 
-            Bukkit.getScheduler().runTaskLater(JavaPlugin.getPlugin(MoShields.class), () -> Features.getActiveAbilityMap().remove(player.getUniqueId()), abilityLength * 20); //times 20 because its in ticks
+            Bukkit.getScheduler().runTaskLater(JavaPlugin.getPlugin(MoShields.class), () -> Features.getActiveSpecialAbilityMap().remove(player.getUniqueId()), abilityLength * 20); //times 20 because its in ticks
 
         }
 
