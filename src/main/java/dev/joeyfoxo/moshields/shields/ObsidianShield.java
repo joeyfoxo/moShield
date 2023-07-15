@@ -42,8 +42,10 @@ public class ObsidianShield extends Shield {
 
     @Override
     void shieldAbilities() {
+
+        //SHIELD CAN ONLY HAVE 1 Active special ability
         Features.addSinkableShield(getShieldType());
-        Features.addCircularProtectShield(getShieldType());
+        Features.addTrackingReflectionShields(getShieldType());
     }
 
 

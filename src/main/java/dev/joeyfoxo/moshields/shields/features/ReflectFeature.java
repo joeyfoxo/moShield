@@ -11,8 +11,6 @@ import static dev.joeyfoxo.moshields.manager.CooldownManager.applyCooldownToShie
 
 public class ReflectFeature {
 
-    int cooldown = 60;
-
     public void reflectArrow(Player player, Projectile projectile) {
         if (Features.getReflectionShields().contains(
                 UtilClass.getCustomModelEnum(player.getActiveItem().getItemMeta()))) {

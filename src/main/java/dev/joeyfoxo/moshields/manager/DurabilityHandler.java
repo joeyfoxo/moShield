@@ -26,9 +26,7 @@ import static dev.joeyfoxo.moshields.shields.Shield.ShieldDurabilityNamespace;
 public class DurabilityHandler implements Listener {
 
     public DurabilityHandler() {
-
         Bukkit.getPluginManager().registerEvents(this, JavaPlugin.getPlugin(MoShields.class));
-
     }
 
     @EventHandler

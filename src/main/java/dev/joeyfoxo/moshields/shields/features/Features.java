@@ -6,9 +6,11 @@ import java.util.*;
 
 public record Features() {
 
+    private static final HashMap<UUID, Abilities> activeAbilityMap = new HashMap<>();
     private static final Set<ShieldType> sinkableShields = new HashSet<>();
     private static final Set<ShieldType> reflectionShields = new HashSet<>();
-    private static final Set<ShieldType> circularProtectShields = new HashSet<>();
+    private static final Set<ShieldType> circleInvulnerabilityShields = new HashSet<>();
+    private static final Set<ShieldType> trackingReflectionShields = new HashSet<>();
 
     public static final Set<UUID> playersSinking = new HashSet<>();
 
@@ -20,8 +22,12 @@ public record Features() {
         return reflectionShields;
     }
 
-    public static Set<ShieldType> getCircularProtectShields() {
-        return circularProtectShields;
+    public static Set<ShieldType> getCircleInvulnerabilityShields() {
+        return circleInvulnerabilityShields;
+    }
+
+    public static Set<ShieldType> getTrackingReflectionShields() {
+        return trackingReflectionShields;
     }
 
     public static void addSinkableShield(ShieldType shieldType) {
@@ -33,6 +39,22 @@ public record Features() {
     }
 
     public static void addCircularProtectShield(ShieldType shieldType) {
-        circularProtectShields.add(shieldType);
+        circleInvulnerabilityShields.add(shieldType);
+    }
+    public static void addTrackingReflectionShields(ShieldType shieldType) {
+        trackingReflectionShields.add(shieldType);
+    }
+
+
+    public static HashMap<UUID, Abilities> getActiveAbilityMap() {
+        return activeAbilityMap;
+    }
+
+    public static boolean hasActiveAbility(UUID uuid) {
+        return getActiveAbilityMap().containsKey(uuid);
+    }
+
+    public static void setActiveAbility(UUID uuid, Abilities ability) {
+        getActiveAbilityMap().put(uuid, ability);
     }
 }
