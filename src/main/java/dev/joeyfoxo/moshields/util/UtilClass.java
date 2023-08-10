@@ -1,17 +1,22 @@
 package dev.joeyfoxo.moshields.util;
 
-import dev.joeyfoxo.moshields.manager.ShieldType;
+import dev.joeyfoxo.moshields.shields.Shield;
+import dev.joeyfoxo.moshields.shields.ShieldType;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Shulker;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
 public class UtilClass {
+
+    public static HashMap<ShieldType, ItemStack> shieldItemMap = new HashMap<>();
+
 
     public static void setCustomModelID(ItemMeta meta, NamespacedKey key, ShieldType type) {
         meta.getPersistentDataContainer().set(key, PersistentDataType.INTEGER, type.ordinal());
@@ -80,6 +85,12 @@ public class UtilClass {
             heldShields.add(getCustomModelEnum(player.getInventory().getItemInOffHand().getItemMeta()));
         }
         return heldShields;
+    }
+
+    public static ItemStack getShieldItemFromType(ShieldType shieldType) {
+
+        return shieldItemMap.getOrDefault(shieldType, null);
+
     }
 
 }

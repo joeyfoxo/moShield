@@ -2,29 +2,24 @@ package dev.joeyfoxo.moshields.manager;
 
 import dev.joeyfoxo.moshields.MoShields;
 import dev.joeyfoxo.moshields.shields.ObsidianShield;
-import dev.joeyfoxo.moshields.shields.StoneShield;
+import dev.joeyfoxo.moshields.shields.ShieldType;
+import dev.joeyfoxo.moshields.shields.WoodenShield;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
-import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.inventory.ItemStack;
 
 public class ShieldManager {
 
     public ShieldManager(MoShields main) {
 
-        new ObsidianShield(new ItemStack(Material.SHIELD),
-                Component.text().content("Obsidian Shield")
-                        .decoration(TextDecoration.ITALIC, false).build(),
+        new ObsidianShield(ShieldType.OBSIDIAN, Component.text().content("Obsidian Shield")
+                .decoration(TextDecoration.ITALIC, false).build(),
                 new NamespacedKey(main, "obsidian_shield"));
 
-
-        new StoneShield(new ItemStack(Material.SHIELD),
-                Component.text().content("Stone Shield")
-                        //.color(TextColor.color(100, 100, 100))
+        new WoodenShield(ShieldType.WOODEN,
+                Component.text().content("Wooden Shield")
                         .decoration(TextDecoration.ITALIC, false).build(),
-                new NamespacedKey(main, "stone_shield"));
-
+                new NamespacedKey(main, "wooden_shield"));
     }
 
 }

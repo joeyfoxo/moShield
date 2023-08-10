@@ -1,37 +1,43 @@
 package dev.joeyfoxo.moshields.manager;
 
 import dev.joeyfoxo.moshields.MoShields;
+import dev.joeyfoxo.moshields.shields.ShieldType;
 import dev.joeyfoxo.moshields.shields.features.Abilities;
 import dev.joeyfoxo.moshields.shields.features.Features;
-import dev.joeyfoxo.moshields.shields.features.ReflectFeature;
-import dev.joeyfoxo.moshields.shields.features.SinkFeature;
-import dev.joeyfoxo.moshields.shields.features.specialabilities.CircleInvulnerabilityFeature;
-import dev.joeyfoxo.moshields.shields.features.specialabilities.TrackingReflectFeature;
+import dev.joeyfoxo.moshields.shields.features.Reflect;
+import dev.joeyfoxo.moshields.shields.features.Sink;
+import dev.joeyfoxo.moshields.shields.features.specialabilities.CircleInvulnerability;
+import dev.joeyfoxo.moshields.shields.features.specialabilities.ForceField;
+import dev.joeyfoxo.moshields.shields.features.specialabilities.TrackingReflect;
 import dev.joeyfoxo.moshields.util.UtilClass;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import static dev.joeyfoxo.moshields.shields.features.Features.getShieldAbilities;
-import static dev.joeyfoxo.moshields.shields.features.Features.playersSinking;
+import java.util.HashSet;
+
+import static dev.joeyfoxo.moshields.manager.Cooldown.*;
+import static dev.joeyfoxo.moshields.shields.features.Features.*;
 
 public class FeatureHandler implements Listener {
 
-    SinkFeature sinkFeature = new SinkFeature();
-    ReflectFeature reflectFeature = new ReflectFeature();
-    CircleInvulnerabilityFeature circleInvulnerabilityFeature = new CircleInvulnerabilityFeature();
-    TrackingReflectFeature trackingReflectFeature = new TrackingReflectFeature();
+    Reflect reflect = new Reflect();
+    CircleInvulnerability circleInvulnerability = new CircleInvulnerability();
+    TrackingReflect trackingReflect = new TrackingReflect();
+    ForceField forceField = new ForceField();
 
     public FeatureHandler() {
         Bukkit.getPluginManager().registerEvents(this, JavaPlugin.getPlugin(MoShields.class));
-        new SinkFeature();
+        new Sink();
     }
 
     @EventHandler
@@ -39,34 +45,54 @@ public class FeatureHandler implements Listener {
 
         if (event.getEntity() instanceof Player player) {
 
-
             if (!UtilClass.isHoldingCustomShield(player)) {
                 return;
             }
             for (ShieldType heldShield : UtilClass.getHeldShields(player)) {
 
-                for (Abilities abilities : getShieldAbilities(heldShield)) {
+                if (!hasShieldAbility(heldShield)) {
+                    continue;
+                }
+                
 
-                    if (player.isBlocking()) {
+                HashSet<Abilities> abilitiesList = getShieldAbilities(heldShield);
+                for (Abilities ability : abilitiesList) {
+                    if (!Features.isAbilityActive(player.getUniqueId())) {
+                        return;
+                    }
 
-                        switch (abilities) {
-                            case REFLECT -> {
-                                if (event.getDamager() instanceof Projectile projectile) {
-                                    reflectFeature.reflectArrow(player, projectile);
+                    if (ability.isSpecialAbility()) {
+
+                        switch (ability) {
+                            case PROJECTILE_TRACKING_REFLECTION -> {
+                                if (player.isBlocking()) {
+                                    trackingReflect.performAbility(event);
                                 }
                             }
-                            case PROJECTILE_TRACKING_REFLECTION -> {
-                                trackingReflectFeature.performAbility(event);
+                            case CIRCULAR_PROTECTION -> {
+                                circleInvulnerability.performAbility(event);
+
+                            }
+
+                            case FORCEFIELD -> {
+
+                                if (player.isBlocking()) {
+                                    forceField.performAbility(event);
+                                }
+                            }
+                        }
+                    } else {
+                        switch (ability) {
+                            case REFLECT -> {
+                                if (player.isBlocking()) {
+                                    reflect.reflectArrow(event);
+                                }
                             }
                         }
                     }
-
                 }
-
             }
-
         }
-
     }
 
     @EventHandler
@@ -78,12 +104,38 @@ public class FeatureHandler implements Listener {
         }
 
         if (player.isSneaking() && event.getAction().isRightClick()) {
-            for (ShieldType heldShield : UtilClass.getHeldShields(player)) {
+
+            ItemStack heldItem = event.getItem();
+
+            ShieldType heldShield = UtilClass.getCustomModelEnum(heldItem.getItemMeta());
+
+            if (shieldIsOnCooldown(player.getUniqueId(), heldShield)) {
+                player.sendMessage(Component.text().content("Sorry you need to wait " + getShieldCooldown(player.getUniqueId(), heldShield) + " more seconds to use this ability!").color(TextColor.color(255, 100, 100)).build());
+                return;
+            }
+
+            if (Features.hasShieldAbility(heldShield)) {
+
                 Features.getShieldAbilities(heldShield).stream().filter(Abilities::isSpecialAbility).forEach(ability -> {
                     switch (ability) {
-                        case CIRCULAR_PROTECTION -> circleInvulnerabilityFeature.activateAbility(player);
-                        case PROJECTILE_TRACKING_REFLECTION -> trackingReflectFeature.activateAbility(player);
+                        case CIRCULAR_PROTECTION -> {
+                            circleInvulnerability.activateAbility(player);
+                            DurabilityHandler.applyDamageToShield(heldItem, heldShield, 10);
+
+                        }
+                        case PROJECTILE_TRACKING_REFLECTION -> {
+                            trackingReflect.activateAbility(player);
+                            DurabilityHandler.applyDamageToShield(heldItem, heldShield, 10);
+                        }
+                        case FORCEFIELD -> {
+                            forceField.activateAbility(player);
+                            DurabilityHandler.applyDamageToShield(heldItem, heldShield, 10);
+                        }
                     }
+
+                    displayAbilityTimer(player, heldShield);
+                    applyCooldownToShield(player, heldShield, ability.getCooldown());
+                    Bukkit.getScheduler().runTaskLater(JavaPlugin.getPlugin(MoShields.class), () -> Features.getActiveSpecialAbilityMap().remove(player.getUniqueId()), ability.getActivationLength() * 20L); //times 20 because its in ticks
 
                 });
             }
@@ -109,5 +161,10 @@ public class FeatureHandler implements Listener {
             }
 
         }
+    }
+
+
+    private void displayAbilityTimer(Player player, ShieldType shieldType) {
+        new AbilityTimer(player, shieldType);
     }
 }

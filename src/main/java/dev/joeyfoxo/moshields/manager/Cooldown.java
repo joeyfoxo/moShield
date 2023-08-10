@@ -1,6 +1,7 @@
 package dev.joeyfoxo.moshields.manager;
 
 import dev.joeyfoxo.moshields.MoShields;
+import dev.joeyfoxo.moshields.shields.ShieldType;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
@@ -11,7 +12,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.UUID;
 
-public class CooldownManager implements Runnable {
+public class Cooldown implements Runnable {
 
     private static final HashMap<UUID, HashMap<ShieldType, Integer>> playerAbilityCooldown = new HashMap<>();
 
@@ -19,23 +20,29 @@ public class CooldownManager implements Runnable {
     public void run() {
 
         Bukkit.getScheduler().runTaskTimer(JavaPlugin.getPlugin(MoShields.class),
-                () -> getCooldownMap().forEach((uuid, shieldTypeIntegerHashMap)
-                        -> {
+                () -> {
 
-                    if (getCooldownMap().get(uuid).isEmpty()) {
-                        getCooldownMap().remove(uuid);
-                        return;
-                    }
+                    getCooldownMap().entrySet().removeIf(currentMap -> currentMap.getValue().isEmpty());
+                    getCooldownMap().forEach((uuid, shieldTypeIntegerHashMap)
+                            -> {
 
-                    for (ShieldType shieldType : shieldTypeIntegerHashMap.keySet()) {
-                        if (shieldTypeIntegerHashMap.get(shieldType) <= 0) {
-                            shieldTypeIntegerHashMap.remove(shieldType);
-                        } else {
-                            shieldTypeIntegerHashMap.replace(shieldType, shieldTypeIntegerHashMap.get(shieldType) - 1);
+
+                        for (ShieldType shieldType : shieldTypeIntegerHashMap.keySet()) {
+                            if (shieldTypeIntegerHashMap.get(shieldType) <= 0) {
+                                shieldTypeIntegerHashMap.remove(shieldType);
+                                if (Bukkit.getPlayer(uuid) != null) {
+                                    Player player = Bukkit.getPlayer(uuid);
+                                    player.sendActionBar(Component.text().content(
+                                                    "Shield Ability Replenished")
+                                            .color(TextColor.color(0, 255, 0)).build());
+                                }
+                            } else {
+                                shieldTypeIntegerHashMap.replace(shieldType, shieldTypeIntegerHashMap.get(shieldType) - 1);
+                            }
+
                         }
-
-                    }
-                }), 0, 20);
+                    });
+                }, 0, 20);
     }
 
 
@@ -49,8 +56,7 @@ public class CooldownManager implements Runnable {
 
         if (!playerAbilityCooldown.containsKey(uuid)) {
             playerAbilityCooldown.put(uuid, new HashMap<>(Collections.singletonMap(shieldType, cooldown)));
-        }
-        else {
+        } else {
             playerAbilityCooldown.get(uuid).put(shieldType, cooldown);
         }
     }
