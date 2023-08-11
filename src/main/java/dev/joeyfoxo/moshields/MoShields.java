@@ -1,5 +1,6 @@
 package dev.joeyfoxo.moshields;
 
+import dev.joeyfoxo.moshields.loottables.LootTablePopulate;
 import dev.joeyfoxo.moshields.manager.DurabilityHandler;
 import dev.joeyfoxo.moshields.manager.FeatureHandler;
 import dev.joeyfoxo.moshields.manager.ShieldManager;
@@ -19,6 +20,8 @@ public final class MoShields extends JavaPlugin {
 
         //Upgradeable Shields
         new ShieldUpgrade();
+
+        new LootTablePopulate();
 
     }
 

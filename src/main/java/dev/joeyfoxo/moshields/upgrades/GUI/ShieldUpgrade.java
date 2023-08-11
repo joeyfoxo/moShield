@@ -2,7 +2,7 @@ package dev.joeyfoxo.moshields.upgrades.GUI;
 
 import dev.joeyfoxo.moshields.MoShields;
 import dev.joeyfoxo.moshields.shields.ShieldType;
-import dev.joeyfoxo.moshields.upgrades.items.ObsidianUpgrade;
+import dev.joeyfoxo.moshields.upgrades.items.SlimeUpgrade;
 import dev.joeyfoxo.moshields.util.UtilClass;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -12,11 +12,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.AnvilInventory;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class ShieldUpgrade implements Listener {
+
+    ShieldType upgradedShield;
 
     public ShieldUpgrade() {
         Bukkit.getPluginManager().registerEvents(this, JavaPlugin.getPlugin(MoShields.class));
@@ -25,7 +26,7 @@ public class ShieldUpgrade implements Listener {
     @EventHandler
     public void TEMPJOIN(PlayerJoinEvent event) {
 
-        event.getPlayer().getInventory().addItem(ObsidianUpgrade.getUpgrade());
+        event.getPlayer().getInventory().addItem(SlimeUpgrade.getUpgrade());
 
     }
 
@@ -44,13 +45,26 @@ public class ShieldUpgrade implements Listener {
             return;
         }
 
-        if (inventory.getSecondItem().equals(ObsidianUpgrade.getUpgrade())) {
-            inventory.setRepairCost(20);
-            event.setResult(UtilClass.getShieldItemFromType(ShieldType.OBSIDIAN));
+        upgradeSelector(inventory);
 
+        if (!upgradedShield.isUpgradeable()) {
+            return;
+        }
+        inventory.setRepairCost(upgradedShield.getUpgradeCost());
+        event.setResult(UtilClass.getShieldItemFromType(upgradedShield));
+        event.getViewers().forEach(humanEntity -> ((Player) humanEntity).updateInventory());
+    }
+
+    private void upgradeSelector(AnvilInventory inventory) {
+
+        if (inventory.getSecondItem().equals(SlimeUpgrade.getUpgrade())) {
+            upgradedShield = ShieldType.SLIME;
         }
 
-        event.getViewers().forEach(humanEntity -> ((Player) humanEntity).updateInventory());
+        if (inventory.getSecondItem().equals(new ItemStack(Material.NETHERITE_INGOT))) {
+            upgradedShield = ShieldType.NETHERITE;
+        }
+
     }
 
 }

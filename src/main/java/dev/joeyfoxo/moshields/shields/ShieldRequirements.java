@@ -4,6 +4,4 @@ public interface ShieldRequirements {
 
     ShieldType getShieldType();
 
-    void createRecipe();
-
 }

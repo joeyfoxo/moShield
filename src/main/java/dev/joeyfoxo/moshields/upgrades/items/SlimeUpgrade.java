@@ -9,23 +9,16 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-public class ObsidianUpgrade {
+public class SlimeUpgrade {
 
     public static ItemStack getUpgrade() {
 
-        ItemStack itemStack = new ItemStack(Material.OBSIDIAN);
+        ItemStack itemStack = new ItemStack(Material.SLIME_BLOCK);
         ItemMeta meta = itemStack.getItemMeta();
 
         meta.displayName(Component.text()
-                .content("H")
-                .decoration(TextDecoration.OBFUSCATED, true)
-                .color(TextColor.color(255, 255, 255))
-                .append(Component.text().content("Obsidian Shield Upgrade")
-                        .decoration(TextDecoration.OBFUSCATED, false)
-                        .color(TextColor.color(100, 100, 100)))
-                .append(Component.text().content("H")
-                        .decoration(TextDecoration.OBFUSCATED, true)
-                        .color(TextColor.color(255, 255, 255)))
+                .content("Slime Shield Upgrade")
+                .color(TextColor.color(73, 207, 0))
                 .decoration(TextDecoration.ITALIC, false).build());
 
         meta.addEnchant(Enchantment.LUCK, 1, true);

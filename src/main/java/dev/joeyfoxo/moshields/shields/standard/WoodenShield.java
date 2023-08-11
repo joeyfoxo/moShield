@@ -1,5 +1,7 @@
-package dev.joeyfoxo.moshields.shields;
+package dev.joeyfoxo.moshields.shields.standard;
 
+import dev.joeyfoxo.moshields.shields.Shield;
+import dev.joeyfoxo.moshields.shields.ShieldType;
 import dev.joeyfoxo.moshields.util.UtilClass;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -44,14 +46,14 @@ public class WoodenShield extends Shield {
     }
 
     @Override
-    void modifyMeta(ItemMeta meta) {
+   protected void modifyMeta(ItemMeta meta) {
         UtilClass.setCustomModelID(meta, key, getShieldType());
         // ALWAYS INCLUDE THIS LINE
 
     }
 
     @Override
-    void shieldAbilities() {
+   protected void shieldAbilities() {
 
     }
 

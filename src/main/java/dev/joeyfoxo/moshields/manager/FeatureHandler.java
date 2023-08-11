@@ -26,7 +26,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.HashSet;
 
 import static dev.joeyfoxo.moshields.manager.Cooldown.*;
-import static dev.joeyfoxo.moshields.shields.features.Features.*;
+import static dev.joeyfoxo.moshields.shields.features.Features.getShieldAbilities;
+import static dev.joeyfoxo.moshields.shields.features.Features.playersSinking;
 
 public class FeatureHandler implements Listener {
 
@@ -48,21 +49,16 @@ public class FeatureHandler implements Listener {
             if (!UtilClass.isHoldingCustomShield(player)) {
                 return;
             }
-            for (ShieldType heldShield : UtilClass.getHeldShields(player)) {
 
-                if (!hasShieldAbility(heldShield)) {
-                    continue;
-                }
-                
+            for (ShieldType heldShield : UtilClass.getHeldShields(player)) {
 
                 HashSet<Abilities> abilitiesList = getShieldAbilities(heldShield);
                 for (Abilities ability : abilitiesList) {
-                    if (!Features.isAbilityActive(player.getUniqueId())) {
-                        return;
-                    }
 
                     if (ability.isSpecialAbility()) {
-
+                        if (!Features.isAbilityActive(player.getUniqueId())) {
+                            return;
+                        }
                         switch (ability) {
                             case PROJECTILE_TRACKING_REFLECTION -> {
                                 if (player.isBlocking()) {

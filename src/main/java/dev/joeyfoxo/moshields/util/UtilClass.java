@@ -18,6 +18,9 @@ public class UtilClass {
     public static HashMap<ShieldType, ItemStack> shieldItemMap = new HashMap<>();
 
 
+    public static Boolean percentChance(double chance) {
+        return (Math.random() <= chance);
+    }
     public static void setCustomModelID(ItemMeta meta, NamespacedKey key, ShieldType type) {
         meta.getPersistentDataContainer().set(key, PersistentDataType.INTEGER, type.ordinal());
     }

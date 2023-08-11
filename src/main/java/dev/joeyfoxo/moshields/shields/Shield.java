@@ -27,7 +27,7 @@ public abstract class Shield implements ShieldRequirements {
         shieldAbilities();
     }
 
-    public ItemStack createShieldItem() {
+    protected ItemStack createShieldItem() {
 
         ItemMeta meta = itemStack.getItemMeta();
         meta.displayName(title);
@@ -36,12 +36,13 @@ public abstract class Shield implements ShieldRequirements {
         modifyMeta(meta);
         itemStack.setItemMeta(meta);
         shieldItemMap.put(shieldType, itemStack);
+
         return itemStack;
 
     }
 
-    abstract void modifyMeta(ItemMeta meta);
+    protected abstract void modifyMeta(ItemMeta meta);
 
-    abstract void shieldAbilities();
+    protected abstract void shieldAbilities();
 
 }
