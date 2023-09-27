@@ -2,11 +2,12 @@ package dev.joeyfoxo.moshields.shields.features;
 
 public enum Abilities {
 
-    CIRCULAR_PROTECTION(true, 10, 120),
-    PROJECTILE_TRACKING_REFLECTION(true, 10, 120),
-    FORCEFIELD(true, 10, 120),
+    CIRCULAR_PROTECTION(true, 30, 120),
+    PROJECTILE_TRACKING_REFLECTION(true, 20, 120),
+    FORCEFIELD(true, 30, 120),
     REFLECT,
-    SINK;
+    SINK,
+    SLOW;
 
     private final boolean isSpecialAbility;
     private final int activationLength;
@@ -35,7 +36,5 @@ public enum Abilities {
         this.activationLength = 0;
         this.isSpecialAbility = false;
     }
-
-
 }
 

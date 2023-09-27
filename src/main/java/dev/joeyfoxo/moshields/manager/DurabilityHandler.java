@@ -36,7 +36,7 @@ public class DurabilityHandler implements Listener {
         ItemStack itemStack = event.getItem();
         ShieldType shieldType = UtilClass.getCustomModelEnum(itemStack.getItemMeta());
 
-        if (UtilClass.isHoldingCustomShield(itemStack.getItemMeta()) && shieldType.hasCustomDurability()) {
+        if (UtilClass.isCustomShield(itemStack.getItemMeta()) && shieldType.hasCustomDurability()) {
 
             applyDamageToShield(event,
                     event.getItem(),

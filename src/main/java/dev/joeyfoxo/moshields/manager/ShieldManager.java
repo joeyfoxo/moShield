@@ -2,6 +2,8 @@ package dev.joeyfoxo.moshields.manager;
 
 import dev.joeyfoxo.moshields.MoShields;
 import dev.joeyfoxo.moshields.shields.*;
+import dev.joeyfoxo.moshields.shields.special.MirrorShield;
+import dev.joeyfoxo.moshields.shields.special.ReinforcedShield;
 import dev.joeyfoxo.moshields.shields.special.SlimeShield;
 import dev.joeyfoxo.moshields.shields.standard.*;
 import net.kyori.adventure.text.Component;
@@ -45,6 +47,14 @@ public class ShieldManager {
         new SlimeShield(ShieldType.SLIME, Component.text().content("Slime Shield")
                 .decoration(TextDecoration.ITALIC, false).build(),
                 new NamespacedKey(main, "slime_shield"));
+
+        new ReinforcedShield(ShieldType.REINFORCED, Component.text().content("Reinforced Shield")
+                .decoration(TextDecoration.ITALIC, false).build(),
+                new NamespacedKey(main, "reinforced_shield"));
+
+        new MirrorShield(ShieldType.MIRROR, Component.text().content("Mirrored Shield")
+                .decoration(TextDecoration.ITALIC, false).build(),
+                new NamespacedKey(main, "mirror_shield"));
 
     }
 

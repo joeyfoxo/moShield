@@ -2,10 +2,7 @@ package dev.joeyfoxo.moshields.manager;
 
 import dev.joeyfoxo.moshields.MoShields;
 import dev.joeyfoxo.moshields.shields.ShieldType;
-import dev.joeyfoxo.moshields.shields.features.Abilities;
-import dev.joeyfoxo.moshields.shields.features.Features;
-import dev.joeyfoxo.moshields.shields.features.Reflect;
-import dev.joeyfoxo.moshields.shields.features.Sink;
+import dev.joeyfoxo.moshields.shields.features.*;
 import dev.joeyfoxo.moshields.shields.features.specialabilities.CircleInvulnerability;
 import dev.joeyfoxo.moshields.shields.features.specialabilities.ForceField;
 import dev.joeyfoxo.moshields.shields.features.specialabilities.TrackingReflect;
@@ -26,8 +23,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.HashSet;
 
 import static dev.joeyfoxo.moshields.manager.Cooldown.*;
-import static dev.joeyfoxo.moshields.shields.features.Features.getShieldAbilities;
-import static dev.joeyfoxo.moshields.shields.features.Features.playersSinking;
+import static dev.joeyfoxo.moshields.shields.features.Features.*;
 
 public class FeatureHandler implements Listener {
 
@@ -39,6 +35,7 @@ public class FeatureHandler implements Listener {
     public FeatureHandler() {
         Bukkit.getPluginManager().registerEvents(this, JavaPlugin.getPlugin(MoShields.class));
         new Sink();
+        new Slowness();
     }
 
     @EventHandler
@@ -46,7 +43,7 @@ public class FeatureHandler implements Listener {
 
         if (event.getEntity() instanceof Player player) {
 
-            if (!UtilClass.isHoldingCustomShield(player)) {
+            if (!UtilClass.isCustomShield(player)) {
                 return;
             }
 
@@ -66,7 +63,9 @@ public class FeatureHandler implements Listener {
                                 }
                             }
                             case CIRCULAR_PROTECTION -> {
-                                circleInvulnerability.performAbility(event);
+                                if (player.isBlocking()) {
+                                    circleInvulnerability.performAbility(event);
+                                }
 
                             }
 
@@ -95,7 +94,7 @@ public class FeatureHandler implements Listener {
     public void onShieldAbilityActivation(PlayerInteractEvent event) {
         Player player = event.getPlayer();
 
-        if (!UtilClass.isHoldingCustomShield(player)) {
+        if (!UtilClass.isCustomShield(player)) {
             return;
         }
 
@@ -143,16 +142,19 @@ public class FeatureHandler implements Listener {
     public void onEnterWater(PlayerMoveEvent event) {
 
         Player player = event.getPlayer();
-        if (!player.isUnderWater() || !player.isInWater()) {
-            return;
-        }
 
-        if (!UtilClass.isHoldingCustomShield(player)) {
+        if (!UtilClass.isCustomShield(player)) {
             playersSinking.remove(player.getUniqueId());
+            playersSlowed.remove(player.getUniqueId());
         }
 
         for (ShieldType shieldType : UtilClass.getHeldShields(player)) {
-            if (Features.getShieldAbilities(shieldType).contains(Abilities.SINK)) {
+
+            if (Features.getShieldAbilities(shieldType).contains(Abilities.SLOW)) {
+                playersSlowed.add(player.getUniqueId());
+            }
+
+            if (Features.getShieldAbilities(shieldType).contains(Abilities.SINK) && (player.isUnderWater() || player.isInWater())) {
                 playersSinking.add(player.getUniqueId());
             }
 

@@ -2,6 +2,8 @@ package dev.joeyfoxo.moshields.upgrades.GUI;
 
 import dev.joeyfoxo.moshields.MoShields;
 import dev.joeyfoxo.moshields.shields.ShieldType;
+import dev.joeyfoxo.moshields.upgrades.items.MirrorUpgrade;
+import dev.joeyfoxo.moshields.upgrades.items.ReinforcedUpgrade;
 import dev.joeyfoxo.moshields.upgrades.items.SlimeUpgrade;
 import dev.joeyfoxo.moshields.util.UtilClass;
 import org.bukkit.Bukkit;
@@ -27,6 +29,8 @@ public class ShieldUpgrade implements Listener {
     public void TEMPJOIN(PlayerJoinEvent event) {
 
         event.getPlayer().getInventory().addItem(SlimeUpgrade.getUpgrade());
+        event.getPlayer().getInventory().addItem(ReinforcedUpgrade.getUpgrade());
+        event.getPlayer().getInventory().addItem(MirrorUpgrade.getUpgrade());
 
     }
 
@@ -41,13 +45,9 @@ public class ShieldUpgrade implements Listener {
             return;
         }
 
-        if (!inventory.getFirstItem().equals(new ItemStack(Material.SHIELD))) {
-            return;
-        }
-
         upgradeSelector(inventory);
 
-        if (!upgradedShield.isUpgradeable()) {
+        if (upgradedShield == null || !upgradedShield.isUpgradeable()) {
             return;
         }
         inventory.setRepairCost(upgradedShield.getUpgradeCost());
@@ -57,15 +57,29 @@ public class ShieldUpgrade implements Listener {
 
     private void upgradeSelector(AnvilInventory inventory) {
 
+        if (UtilClass.getCustomModelEnum(inventory.getFirstItem().getItemMeta()) == ShieldType.SLIME
+                && inventory.getSecondItem().equals(MirrorUpgrade.getUpgrade())) {
+            upgradedShield = ShieldType.MIRROR;
+            return;
+        }
+
+
         if (inventory.getSecondItem().equals(SlimeUpgrade.getUpgrade())) {
             upgradedShield = ShieldType.SLIME;
+            return;
+        }
+
+        if (inventory.getSecondItem().equals(ReinforcedUpgrade.getUpgrade())) {
+            upgradedShield = ShieldType.REINFORCED;
+            return;
         }
 
         if (inventory.getSecondItem().equals(new ItemStack(Material.NETHERITE_INGOT))) {
             upgradedShield = ShieldType.NETHERITE;
+            return;
         }
-
     }
+
 
 }
 

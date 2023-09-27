@@ -8,7 +8,9 @@ public enum ShieldType {
     GOLD(450, 0),
     DIAMOND(600, 0),
     NETHERITE(800, 20),
-    SLIME(300, 50);
+    SLIME(300, 30),
+    REINFORCED(500, 40),
+    MIRROR(500, 40);
 
     private final int durability;
     private final int upgradeCost;

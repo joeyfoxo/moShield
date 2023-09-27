@@ -14,6 +14,7 @@ public record Features() {
     private static final HashMap<ShieldType, HashSet<Abilities>> shieldAbilityMap = new HashMap<>();
 
     public static final Set<UUID> playersSinking = new HashSet<>();
+    public static final Set<UUID> playersSlowed = new HashSet<>();
 
     public static HashSet<Abilities> getShieldAbilities(ShieldType shieldType) {
         return shieldAbilityMap.get(shieldType);
