@@ -57,6 +57,8 @@ public class ShieldUpgrade implements Listener {
 
     private void upgradeSelector(AnvilInventory inventory) {
 
+        System.out.println(UtilClass.getCustomModelEnum(inventory.getFirstItem().getItemMeta()));
+
         if (UtilClass.getCustomModelEnum(inventory.getFirstItem().getItemMeta()) == ShieldType.SLIME
                 && inventory.getSecondItem().equals(MirrorUpgrade.getUpgrade())) {
             upgradedShield = ShieldType.MIRROR;
