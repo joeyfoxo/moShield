@@ -1,6 +1,8 @@
 package dev.joeyfoxo.moshields.shields.features;
 
+import dev.joeyfoxo.moshields.shields.features.ability.Ability;
 import org.bukkit.Location;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -9,37 +11,33 @@ import org.bukkit.util.Vector;
 
 import java.util.HashSet;
 
-public class Reflect {
+public class Reflect implements Ability {
 
-    public void reflectArrow(EntityDamageByEntityEvent event) {
-
+    @Override
+    public void performAbility(EntityDamageByEntityEvent event) {
         if (event.getEntity() instanceof Player player
-                && event.getDamager() instanceof Projectile projectile
-                && projectile.getShooter() instanceof Entity entity) {
-            summonReflectable(player, projectile, entity);
+                && event.getDamager() instanceof Arrow arrow
+                && arrow.getShooter() instanceof Entity shooter) {
+            if (event.getFinalDamage() == 0) {
+                summonReflectable(player, arrow, shooter);
+            }
         }
     }
 
-    public void reflectArrow(EntityDamageByEntityEvent event, HashSet<Projectile> deflectableProjectiles) {
+    @Override
+    public void applyEffects() {
 
-        if (event.getEntity() instanceof Player player
-                && event.getDamager() instanceof Projectile projectile
-                && projectile.getShooter() instanceof Entity entity
-                && deflectableProjectiles.contains(projectile)) {
-            summonReflectable(player, projectile, entity);
-        }
     }
 
-    private void summonReflectable(Player player, Projectile projectile, Entity entity) {
-        Location location = entity.getLocation();
+    private Vector getReflectedVector(Location playerLoc, Location shooterLoc) {
+        return shooterLoc.subtract(playerLoc).toVector().add(new Vector(0,1,0)).normalize();
+    }
+
+    private void summonReflectable(Player player, Projectile projectile, Entity shooter) {
         projectile.remove();
-        player.launchProjectile(projectile.getClass()).setVelocity(getReflectedVector(player.getLocation(), location));
+        Projectile newProjectile = player.launchProjectile(projectile.getClass());
+        newProjectile.setVelocity(getReflectedVector(player.getLocation(), shooter.getLocation()));
 
-    }
-
-
-    private Vector getReflectedVector(Location playerLoc, Location entityLoc) {
-        return entityLoc.subtract(playerLoc).toVector().add(new Vector(0, 1, 0)).normalize();
     }
 
 }

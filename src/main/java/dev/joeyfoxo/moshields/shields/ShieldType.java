@@ -2,15 +2,16 @@ package dev.joeyfoxo.moshields.shields;
 
 public enum ShieldType {
 
-    WOODEN(200, 0),
-    STONE(250, 0),
-    IRON(350, 0),
-    GOLD(450, 0),
-    DIAMOND(600, 0),
-    NETHERITE(800, 20),
-    SLIME(300, 30),
-    REINFORCED(500, 40),
-    MIRROR(500, 40);
+    WOODEN(337),
+    STONE(350),
+    IRON(400),
+    GOLD(500),
+    DIAMOND(600),
+    NETHERITE(800, 5),
+    SLIME(300, 10),
+    REINFORCED(500, 30),
+    MIRROR(500, 39),
+    ECHO(2000, 30);
 
     private final int durability;
     private final int upgradeCost;
@@ -18,6 +19,17 @@ public enum ShieldType {
     ShieldType(int durability, int upgradeCost) {
         this.durability = durability;
         this.upgradeCost = upgradeCost;
+    }
+
+    ShieldType(int durability) {
+        this.durability = durability;
+        this.upgradeCost = 0;
+    }
+
+
+    ShieldType() {
+        this.durability = 0;
+        this.upgradeCost = 0;
     }
 
     public int getDurability() {

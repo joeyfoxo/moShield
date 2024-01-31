@@ -71,7 +71,7 @@ public class DurabilityHandler implements Listener {
 
             boolean isRemoved = lore.removeIf(currentLineIterator -> hasDurabilityDamage(currentLineIterator.toString()));
 
-            Component currentLine = Component.text().content(shieldCurDurability + " / " + shieldMaxDurability)
+            Component currentLine = Component.text().content("Durability: " + shieldCurDurability + " / " + shieldMaxDurability)
                     .color(TextColor.color(255, 255, 255))
                     .decoration(TextDecoration.ITALIC, false).build();
 
@@ -82,7 +82,7 @@ public class DurabilityHandler implements Listener {
         } else {
 
             List<Component> lore = new ArrayList<>();
-            lore.add(Component.text().content(shieldCurDurability + " / " + shieldMaxDurability)
+            lore.add(Component.text().content("Durability: " + shieldCurDurability + " / " + shieldMaxDurability)
                     .color(TextColor.color(255, 255, 255))
                     .decoration(TextDecoration.ITALIC, false).build());
             meta.lore(lore);

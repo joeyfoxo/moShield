@@ -2,6 +2,7 @@ package dev.joeyfoxo.moshields.upgrades.GUI;
 
 import dev.joeyfoxo.moshields.MoShields;
 import dev.joeyfoxo.moshields.shields.ShieldType;
+import dev.joeyfoxo.moshields.upgrades.items.EchoUpgrade;
 import dev.joeyfoxo.moshields.upgrades.items.MirrorUpgrade;
 import dev.joeyfoxo.moshields.upgrades.items.ReinforcedUpgrade;
 import dev.joeyfoxo.moshields.upgrades.items.SlimeUpgrade;
@@ -31,6 +32,7 @@ public class ShieldUpgrade implements Listener {
         event.getPlayer().getInventory().addItem(SlimeUpgrade.getUpgrade());
         event.getPlayer().getInventory().addItem(ReinforcedUpgrade.getUpgrade());
         event.getPlayer().getInventory().addItem(MirrorUpgrade.getUpgrade());
+        event.getPlayer().getInventory().addItem(EchoUpgrade.getUpgrade());
 
     }
 
@@ -40,8 +42,10 @@ public class ShieldUpgrade implements Listener {
 
         AnvilInventory inventory = event.getInventory();
         inventory.setMaximumRepairCost(200);
+        upgradedShield = null;
 
-        if (inventory.getFirstItem() == null || inventory.getSecondItem() == null) {
+        if (inventory.getFirstItem() == null || inventory.getSecondItem() == null ||
+                inventory.getFirstItem().getAmount() > 1 || inventory.getSecondItem().getAmount() > 1) {
             return;
         }
 
@@ -57,31 +61,41 @@ public class ShieldUpgrade implements Listener {
 
     private void upgradeSelector(AnvilInventory inventory) {
 
-        System.out.println(UtilClass.getCustomModelEnum(inventory.getFirstItem().getItemMeta()));
 
-        if (UtilClass.getCustomModelEnum(inventory.getFirstItem().getItemMeta()) == ShieldType.SLIME
-                && inventory.getSecondItem().equals(MirrorUpgrade.getUpgrade())) {
-            upgradedShield = ShieldType.MIRROR;
-            return;
-        }
+        //If the first item is a standard shield
+        if (UtilClass.getCustomModelEnum(inventory.getFirstItem().getItemMeta()) == null
+                || !UtilClass.isCustomShield(inventory.getFirstItem().getItemMeta())) {
 
+            if (inventory.getSecondItem().equals(SlimeUpgrade.getUpgrade())) {
+                upgradedShield = ShieldType.SLIME;
+                return;
+            }
 
-        if (inventory.getSecondItem().equals(SlimeUpgrade.getUpgrade())) {
-            upgradedShield = ShieldType.SLIME;
-            return;
-        }
+            if (inventory.getSecondItem().equals(ReinforcedUpgrade.getUpgrade())) {
+                upgradedShield = ShieldType.REINFORCED;
+                return;
+            }
 
-        if (inventory.getSecondItem().equals(ReinforcedUpgrade.getUpgrade())) {
-            upgradedShield = ShieldType.REINFORCED;
-            return;
-        }
+            if (inventory.getSecondItem().equals(EchoUpgrade.getUpgrade())) {
+                upgradedShield = ShieldType.ECHO;
+                return;
+            }
 
-        if (inventory.getSecondItem().equals(new ItemStack(Material.NETHERITE_INGOT))) {
-            upgradedShield = ShieldType.NETHERITE;
-            return;
+            if (inventory.getSecondItem().equals(new ItemStack(Material.NETHERITE_INGOT))) {
+                upgradedShield = ShieldType.NETHERITE;
+                return;
+            }
+
+        } else {
+
+            if (UtilClass.getCustomModelEnum(inventory.getFirstItem().getItemMeta()) == ShieldType.SLIME
+                    && inventory.getSecondItem().equals(MirrorUpgrade.getUpgrade())) {
+                upgradedShield = ShieldType.MIRROR;
+                return;
+            }
+
         }
     }
-
 
 }
 

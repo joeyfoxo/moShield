@@ -2,6 +2,8 @@ package dev.joeyfoxo.moshields.shields.features;
 
 import dev.joeyfoxo.moshields.exception.MultipleSpecialAbilitiesException;
 import dev.joeyfoxo.moshields.shields.ShieldType;
+import dev.joeyfoxo.moshields.shields.features.ability.Ability;
+import dev.joeyfoxo.moshields.shields.features.ability.Ability.Abilities;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -10,17 +12,23 @@ import java.util.UUID;
 
 public record Features() {
 
-    private static final HashMap<UUID, Abilities> activeSpecialAbilityMap = new HashMap<>();
+    private static final HashMap<UUID, Ability.Abilities> activeSpecialAbilityMap = new HashMap<>();
     private static final HashMap<ShieldType, HashSet<Abilities>> shieldAbilityMap = new HashMap<>();
 
     public static final Set<UUID> playersSinking = new HashSet<>();
     public static final Set<UUID> playersSlowed = new HashSet<>();
+    public static final Set<UUID> playersBlinded = new HashSet<>();
 
     public static HashSet<Abilities> getShieldAbilities(ShieldType shieldType) {
-        return shieldAbilityMap.get(shieldType);
+
+        if (shieldAbilityMap.get(shieldType) == null) {
+            return new HashSet<>();
+        } else {
+            return shieldAbilityMap.get(shieldType);
+        }
     }
 
-    public static boolean hasShieldAbility(ShieldType shieldType) {
+    public static boolean hasShieldSpecialAbility(ShieldType shieldType) {
         if (getShieldAbilities(shieldType) == null) {
             return false;
         } else {
@@ -29,11 +37,11 @@ public record Features() {
         }
     }
 
-    public static void addShieldAbility(ShieldType shieldType, Abilities... ability) {
+    public static void addShieldAbility(ShieldType shieldType, Ability.Abilities... ability) {
 
         int i = 0;
 
-        for (Abilities abilities : ability) {
+        for (Ability.Abilities abilities : ability) {
 
             if (abilities.isSpecialAbility()) {
                 i++;
@@ -54,6 +62,10 @@ public record Features() {
     public static boolean isAbilityActive(UUID uuid) {
 
         return getActiveSpecialAbilityMap().containsKey(uuid);
+    }
+
+    public static Abilities getAcitveAbility(UUID uuid) {
+        return getActiveSpecialAbilityMap().get(uuid);
     }
 
     public static HashMap<UUID, Abilities> getActiveSpecialAbilityMap() {

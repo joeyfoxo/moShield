@@ -3,6 +3,8 @@ package dev.joeyfoxo.moshields.manager;
 import dev.joeyfoxo.moshields.MoShields;
 import dev.joeyfoxo.moshields.shields.ShieldType;
 import dev.joeyfoxo.moshields.shields.features.*;
+import dev.joeyfoxo.moshields.shields.features.potion.Blindness;
+import dev.joeyfoxo.moshields.shields.features.potion.Slowness;
 import dev.joeyfoxo.moshields.shields.features.specialabilities.CircleInvulnerability;
 import dev.joeyfoxo.moshields.shields.features.specialabilities.ForceField;
 import dev.joeyfoxo.moshields.shields.features.specialabilities.TrackingReflect;
@@ -19,6 +21,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+import dev.joeyfoxo.moshields.shields.features.ability.Ability.Abilities;
 
 import java.util.HashSet;
 
@@ -36,6 +39,7 @@ public class FeatureHandler implements Listener {
         Bukkit.getPluginManager().registerEvents(this, JavaPlugin.getPlugin(MoShields.class));
         new Sink();
         new Slowness();
+        new Blindness();
     }
 
     @EventHandler
@@ -53,34 +57,29 @@ public class FeatureHandler implements Listener {
                 for (Abilities ability : abilitiesList) {
 
                     if (ability.isSpecialAbility()) {
-                        if (!Features.isAbilityActive(player.getUniqueId())) {
-                            return;
-                        }
+
                         switch (ability) {
                             case PROJECTILE_TRACKING_REFLECTION -> {
-                                if (player.isBlocking()) {
+                                if (player.isBlocking() && getAcitveAbility(player.getUniqueId()) == Abilities.PROJECTILE_TRACKING_REFLECTION) {
                                     trackingReflect.performAbility(event);
                                 }
                             }
                             case CIRCULAR_PROTECTION -> {
-                                if (player.isBlocking()) {
+                                if (player.isBlocking() && getAcitveAbility(player.getUniqueId()) == Abilities.CIRCULAR_PROTECTION) {
                                     circleInvulnerability.performAbility(event);
                                 }
 
                             }
+                        }
 
-                            case FORCEFIELD -> {
-
-                                if (player.isBlocking()) {
-                                    forceField.performAbility(event);
-                                }
-                            }
+                        if (Features.isAbilityActive(player.getUniqueId())) {
+                            return;
                         }
                     } else {
                         switch (ability) {
                             case REFLECT -> {
                                 if (player.isBlocking()) {
-                                    reflect.reflectArrow(event);
+                                    reflect.performAbility(event);
                                 }
                             }
                         }
@@ -100,6 +99,11 @@ public class FeatureHandler implements Listener {
 
         if (player.isSneaking() && event.getAction().isRightClick()) {
 
+            if (isAbilityActive(player.getUniqueId())) {
+                player.sendMessage(Component.text().content("You already have a shield ability active!").color(TextColor.color(255, 100, 100)).build());
+                return;
+            }
+
             ItemStack heldItem = event.getItem();
 
             ShieldType heldShield = UtilClass.getCustomModelEnum(heldItem.getItemMeta());
@@ -109,9 +113,9 @@ public class FeatureHandler implements Listener {
                 return;
             }
 
-            if (Features.hasShieldAbility(heldShield)) {
+            if (hasShieldSpecialAbility(heldShield)) {
 
-                Features.getShieldAbilities(heldShield).stream().filter(Abilities::isSpecialAbility).forEach(ability -> {
+                getShieldAbilities(heldShield).stream().filter(Abilities::isSpecialAbility).forEach(ability -> {
                     switch (ability) {
                         case CIRCULAR_PROTECTION -> {
                             circleInvulnerability.activateAbility(player);
@@ -130,7 +134,7 @@ public class FeatureHandler implements Listener {
 
                     displayAbilityTimer(player, heldShield);
                     applyCooldownToShield(player, heldShield, ability.getCooldown());
-                    Bukkit.getScheduler().runTaskLater(JavaPlugin.getPlugin(MoShields.class), () -> Features.getActiveSpecialAbilityMap().remove(player.getUniqueId()), ability.getActivationLength() * 20L); //times 20 because its in ticks
+                    Bukkit.getScheduler().runTaskLater(JavaPlugin.getPlugin(MoShields.class), () -> getActiveSpecialAbilityMap().remove(player.getUniqueId()), ability.getActivationLength() * 20L); //times 20 because its in ticks
 
                 });
             }
@@ -150,11 +154,11 @@ public class FeatureHandler implements Listener {
 
         for (ShieldType shieldType : UtilClass.getHeldShields(player)) {
 
-            if (Features.getShieldAbilities(shieldType).contains(Abilities.SLOW)) {
+            if (getShieldAbilities(shieldType).contains(Abilities.SLOW)) {
                 playersSlowed.add(player.getUniqueId());
             }
 
-            if (Features.getShieldAbilities(shieldType).contains(Abilities.SINK) && (player.isUnderWater() || player.isInWater())) {
+            if (getShieldAbilities(shieldType).contains(Abilities.SINK) && (player.isUnderWater() || player.isInWater())) {
                 playersSinking.add(player.getUniqueId());
             }
 

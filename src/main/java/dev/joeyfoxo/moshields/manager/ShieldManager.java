@@ -2,9 +2,10 @@ package dev.joeyfoxo.moshields.manager;
 
 import dev.joeyfoxo.moshields.MoShields;
 import dev.joeyfoxo.moshields.shields.*;
-import dev.joeyfoxo.moshields.shields.special.MirrorShield;
+import dev.joeyfoxo.moshields.shields.special.EchoShield;
+import dev.joeyfoxo.moshields.shields.special.reflection.MirrorShield;
 import dev.joeyfoxo.moshields.shields.special.ReinforcedShield;
-import dev.joeyfoxo.moshields.shields.special.SlimeShield;
+import dev.joeyfoxo.moshields.shields.special.reflection.SlimeShield;
 import dev.joeyfoxo.moshields.shields.standard.*;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -55,6 +56,10 @@ public class ShieldManager {
         new MirrorShield(ShieldType.MIRROR, Component.text().content("Mirrored Shield")
                 .decoration(TextDecoration.ITALIC, false).build(),
                 new NamespacedKey(main, "mirror_shield"));
+
+        new EchoShield(ShieldType.ECHO, Component.text().content("Echo Shield")
+                .decoration(TextDecoration.ITALIC, false).build(),
+                new NamespacedKey(main, "echo_shield"));
 
     }
 

@@ -1,8 +1,7 @@
-package dev.joeyfoxo.moshields.shields.special;
+package dev.joeyfoxo.moshields.shields.special.reflection;
 
 import dev.joeyfoxo.moshields.shields.Shield;
 import dev.joeyfoxo.moshields.shields.ShieldType;
-import dev.joeyfoxo.moshields.shields.features.Abilities;
 import dev.joeyfoxo.moshields.shields.features.Features;
 import dev.joeyfoxo.moshields.util.UtilClass;
 import net.kyori.adventure.text.Component;
@@ -11,16 +10,17 @@ import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.meta.ItemMeta;
+import dev.joeyfoxo.moshields.shields.features.ability.Ability.Abilities;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MirrorShield extends Shield {
+public class SlimeShield extends Shield {
 
     NamespacedKey key;
 
 
-    public MirrorShield(ShieldType shieldType, Component title, NamespacedKey key) {
+    public SlimeShield(ShieldType shieldType, Component title, NamespacedKey key) {
         super(shieldType, title);
         this.key = key;
         createShieldItem();
@@ -39,7 +39,7 @@ public class MirrorShield extends Shield {
                 .decoration(TextDecoration.ITALIC, false)
                 .decoration(TextDecoration.BOLD, true).build());
 
-        lore.add(Component.text().content("Special Ability: Reflects arrows and tracks the attacker")
+        lore.add(Component.text().content("Ability: Reflects arrows")
                 .color(TextColor.color(100, 100, 100))
                 .decoration(TextDecoration.ITALIC, false).build());
 
@@ -51,7 +51,7 @@ public class MirrorShield extends Shield {
                 .decoration(TextDecoration.ITALIC, false)
                 .decoration(TextDecoration.BOLD, true).build());
 
-        lore.add(Component.text().content("TBD")
+        lore.add(Component.text().content("Wielders sink whilst equipped")
                 .color(TextColor.color(100, 100, 100))
                 .decoration(TextDecoration.ITALIC, false).build());
 
@@ -62,12 +62,12 @@ public class MirrorShield extends Shield {
     @Override
     protected void shieldAbilities() {
 
-        Features.addShieldAbility(getShieldType(), Abilities.PROJECTILE_TRACKING_REFLECTION);
+        Features.addShieldAbility(getShieldType(), Abilities.SINK, Abilities.REFLECT);
     }
 
     @Override
     public ShieldType getShieldType() {
-        return ShieldType.MIRROR;
+        return ShieldType.SLIME;
     }
 
 
