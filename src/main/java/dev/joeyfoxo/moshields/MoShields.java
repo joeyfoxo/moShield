@@ -1,5 +1,6 @@
 package dev.joeyfoxo.moshields;
 
+import dev.joeyfoxo.moshields.loottable.StructureListener;
 import dev.joeyfoxo.moshields.manager.DurabilityHandler;
 import dev.joeyfoxo.moshields.manager.FeatureHandler;
 import dev.joeyfoxo.moshields.manager.ShieldManager;
@@ -16,6 +17,7 @@ public final class MoShields extends JavaPlugin {
         new Cooldown().run();
         new DurabilityHandler();
         new FeatureHandler();
+        new StructureListener();
 
         //Upgradeable Shields
         new ShieldUpgrade();
