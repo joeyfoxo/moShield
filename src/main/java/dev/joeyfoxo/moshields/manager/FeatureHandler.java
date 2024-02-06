@@ -3,10 +3,10 @@ package dev.joeyfoxo.moshields.manager;
 import dev.joeyfoxo.moshields.MoShields;
 import dev.joeyfoxo.moshields.shields.ShieldType;
 import dev.joeyfoxo.moshields.shields.features.*;
-import dev.joeyfoxo.moshields.shields.features.potion.Blindness;
-import dev.joeyfoxo.moshields.shields.features.potion.Slowness;
+import dev.joeyfoxo.moshields.shields.features.potion.RepeatedAbilityApplier;
 import dev.joeyfoxo.moshields.shields.features.specialabilities.CircleInvulnerability;
 import dev.joeyfoxo.moshields.shields.features.specialabilities.ForceField;
+import dev.joeyfoxo.moshields.shields.features.specialabilities.Thorns;
 import dev.joeyfoxo.moshields.shields.features.specialabilities.TrackingReflect;
 import dev.joeyfoxo.moshields.util.UtilClass;
 import net.kyori.adventure.text.Component;
@@ -34,12 +34,12 @@ public class FeatureHandler implements Listener {
     CircleInvulnerability circleInvulnerability = new CircleInvulnerability();
     TrackingReflect trackingReflect = new TrackingReflect();
     ForceField forceField = new ForceField();
+    Thorns thorns = new Thorns();
 
     public FeatureHandler() {
         Bukkit.getPluginManager().registerEvents(this, JavaPlugin.getPlugin(MoShields.class));
         new Sink();
-        new Slowness();
-        new Blindness();
+        new RepeatedAbilityApplier().applyEffects();
     }
 
     @EventHandler
@@ -47,7 +47,7 @@ public class FeatureHandler implements Listener {
 
         if (event.getEntity() instanceof Player player) {
 
-            if (!UtilClass.isCustomShield(player)) {
+            if (!UtilClass.isHoldingCustomShield(player)) {
                 return;
             }
 
@@ -67,6 +67,13 @@ public class FeatureHandler implements Listener {
                             case CIRCULAR_PROTECTION -> {
                                 if (player.isBlocking() && getAcitveAbility(player.getUniqueId()) == Abilities.CIRCULAR_PROTECTION) {
                                     circleInvulnerability.performAbility(event);
+                                }
+
+                            }
+
+                            case THORNS -> {
+                                if (player.isBlocking() && getAcitveAbility(player.getUniqueId()) == Abilities.THORNS) {
+                                    thorns.performAbility(event);
                                 }
 
                             }
@@ -93,7 +100,7 @@ public class FeatureHandler implements Listener {
     public void onShieldAbilityActivation(PlayerInteractEvent event) {
         Player player = event.getPlayer();
 
-        if (!UtilClass.isCustomShield(player)) {
+        if (!UtilClass.isHoldingCustomShield(player)) {
             return;
         }
 
@@ -130,6 +137,11 @@ public class FeatureHandler implements Listener {
                             forceField.activateAbility(player);
                             DurabilityHandler.applyDamageToShield(heldItem, heldShield, 10);
                         }
+
+                        case THORNS -> {
+                            thorns.activateAbility(player);
+                            DurabilityHandler.applyDamageToShield(heldItem, heldShield, 10);
+                        }
                     }
 
                     displayAbilityTimer(player, heldShield);
@@ -147,7 +159,7 @@ public class FeatureHandler implements Listener {
 
         Player player = event.getPlayer();
 
-        if (!UtilClass.isCustomShield(player)) {
+        if (!UtilClass.isHoldingCustomShield(player)) {
             playersSinking.remove(player.getUniqueId());
             playersSlowed.remove(player.getUniqueId());
         }

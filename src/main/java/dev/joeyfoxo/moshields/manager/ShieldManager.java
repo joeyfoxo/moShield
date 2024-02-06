@@ -3,6 +3,7 @@ package dev.joeyfoxo.moshields.manager;
 import dev.joeyfoxo.moshields.MoShields;
 import dev.joeyfoxo.moshields.shields.*;
 import dev.joeyfoxo.moshields.shields.special.EchoShield;
+import dev.joeyfoxo.moshields.shields.special.SpikedShield;
 import dev.joeyfoxo.moshields.shields.special.reflection.MirrorShield;
 import dev.joeyfoxo.moshields.shields.special.ReinforcedShield;
 import dev.joeyfoxo.moshields.shields.special.reflection.SlimeShield;
@@ -60,6 +61,10 @@ public class ShieldManager {
         new EchoShield(ShieldType.ECHO, Component.text().content("Echo Shield")
                 .decoration(TextDecoration.ITALIC, false).build(),
                 new NamespacedKey(main, "echo_shield"));
+
+        new SpikedShield(ShieldType.SPIKED, Component.text().content("Spiked Shield")
+                .decoration(TextDecoration.ITALIC, false).build(),
+                new NamespacedKey(main, "spiked_shield"));
 
     }
 

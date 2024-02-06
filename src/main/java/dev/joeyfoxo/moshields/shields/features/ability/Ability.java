@@ -1,6 +1,5 @@
 package dev.joeyfoxo.moshields.shields.features.ability;
 
-import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 public interface Ability {
@@ -9,10 +8,11 @@ public interface Ability {
 
     void applyEffects();
 
-   enum Abilities {
+    enum Abilities {
         CIRCULAR_PROTECTION(true, 50, 120),
         PROJECTILE_TRACKING_REFLECTION(true, 60, 120),
         FORCEFIELD(true, 60, 120),
+        THORNS(true, 30, 180),
         REFLECT,
         SINK,
         SLOW,

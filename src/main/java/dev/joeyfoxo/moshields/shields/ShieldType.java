@@ -11,7 +11,8 @@ public enum ShieldType {
     SLIME(300, 10),
     REINFORCED(500, 30),
     MIRROR(500, 39),
-    ECHO(2000, 30);
+    SPIKED(400, 10),
+    ECHO(200, 30);
 
     private final int durability;
     private final int upgradeCost;

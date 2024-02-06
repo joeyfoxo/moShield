@@ -1,12 +1,19 @@
 package dev.joeyfoxo.moshields.util;
 
+import dev.joeyfoxo.moshields.MoShields;
 import dev.joeyfoxo.moshields.shields.ShieldType;
+import dev.joeyfoxo.moshields.shields.features.Features;
+import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitTask;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -43,13 +50,13 @@ public class UtilClass {
         return null;
     }
 
-    public static boolean isCustomShield(Player player) {
+    public static boolean isHoldingCustomShield(Player player) {
 
         return (getCustomModelEnum(player.getInventory().getItemInMainHand().getItemMeta()) != null)
                 || (getCustomModelEnum(player.getInventory().getItemInOffHand().getItemMeta()) != null);
     }
 
-    public static boolean isCustomShield(ItemMeta meta) {
+    public static boolean isHoldingCustomShield(ItemMeta meta) {
 
         return getCustomModelEnum(meta) != null;
     }

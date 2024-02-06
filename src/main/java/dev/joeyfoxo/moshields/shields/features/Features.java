@@ -5,10 +5,7 @@ import dev.joeyfoxo.moshields.shields.ShieldType;
 import dev.joeyfoxo.moshields.shields.features.ability.Ability;
 import dev.joeyfoxo.moshields.shields.features.ability.Ability.Abilities;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 public record Features() {
 
