@@ -32,7 +32,7 @@ public class Thorns implements SpecialAbility {
     public void activateAbility(Player player) {
         Features.setActiveSpecialAbility(player.getUniqueId(), Abilities.THORNS);
 
-        //REDUCE THE DURABILITY
+        //TODO REDUCE THE DURABILITY
 
 
     }

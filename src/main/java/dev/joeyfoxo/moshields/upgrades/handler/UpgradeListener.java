@@ -1,8 +1,13 @@
-package dev.joeyfoxo.moshields.upgrades.GUI;
+package dev.joeyfoxo.moshields.upgrades.handler;
 
 import dev.joeyfoxo.moshields.MoShields;
 import dev.joeyfoxo.moshields.shields.ShieldType;
-import dev.joeyfoxo.moshields.upgrades.items.*;
+import dev.joeyfoxo.moshields.upgrades.items.EchoUpgrade;
+import dev.joeyfoxo.moshields.upgrades.items.MirrorUpgrade;
+import dev.joeyfoxo.moshields.upgrades.items.SlimeUpgrade;
+import dev.joeyfoxo.moshields.upgrades.items.SpikedUpgrade;
+import dev.joeyfoxo.moshields.upgrades.items.fragments.ReinforcedFragment;
+import dev.joeyfoxo.moshields.upgrades.items.reinforced.ReinforcedUpgrade;
 import dev.joeyfoxo.moshields.util.UtilClass;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
@@ -22,42 +27,20 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class ShieldUpgrade implements Listener {
+public class UpgradeListener implements Listener {
 
+    ShieldType upgradedShield;
     ItemStack echoUpgrade = EchoUpgrade.getUpgrade();
     ItemStack mirrorUpgrade = MirrorUpgrade.getUpgrade();
     ItemStack reinforcedUpgrade = ReinforcedUpgrade.getUpgrade();
     ItemStack slimeUpgrade = SlimeUpgrade.getUpgrade();
     ItemStack spikedUpgrade = SpikedUpgrade.getUpgrade();
 
-    Set<ItemStack> unPlaceableBlocks = new HashSet<>(List.of(echoUpgrade, mirrorUpgrade, reinforcedUpgrade, slimeUpgrade, spikedUpgrade));
-
-    ShieldType upgradedShield;
-
-    public ShieldUpgrade() {
+    public UpgradeListener() {
         Bukkit.getPluginManager().registerEvents(this, JavaPlugin.getPlugin(MoShields.class));
     }
 
-    @EventHandler
-    public void TEMPJOIN(PlayerJoinEvent event) {
-
-        event.getPlayer().getInventory().addItem(slimeUpgrade);
-        event.getPlayer().getInventory().addItem(reinforcedUpgrade);
-        event.getPlayer().getInventory().addItem(mirrorUpgrade);
-        event.getPlayer().getInventory().addItem(echoUpgrade);
-        event.getPlayer().getInventory().addItem(spikedUpgrade);
-
-    }
-    @EventHandler
-    public void playerPlaceEvent(BlockPlaceEvent event) {
-
-        if (unPlaceableBlocks.contains(event.getItemInHand())) {
-            event.getPlayer().sendMessage(Component.text().content("You cannot place shield upgrades!").color(TextColor.color(255, 100, 100)).build());
-            event.setCancelled(true);
-        }
-
-    }
-
+    Set<ItemStack> unPlaceableBlocks = new HashSet<>(List.of(echoUpgrade, mirrorUpgrade, reinforcedUpgrade, slimeUpgrade, spikedUpgrade));
 
     @EventHandler
     public void shieldUpgradeEvent(PrepareAnvilEvent event) {
@@ -122,5 +105,25 @@ public class ShieldUpgrade implements Listener {
         }
     }
 
-}
+    @EventHandler
+    public void TEMPJOIN(PlayerJoinEvent event) {
 
+        event.getPlayer().getInventory().addItem(slimeUpgrade);
+        event.getPlayer().getInventory().addItem(reinforcedUpgrade);
+        event.getPlayer().getInventory().addItem(mirrorUpgrade);
+        event.getPlayer().getInventory().addItem(echoUpgrade);
+        event.getPlayer().getInventory().addItem(spikedUpgrade);
+        event.getPlayer().getInventory().addItem(ReinforcedFragment.getFragment());
+
+    }
+    @EventHandler
+    public void playerPlaceEvent(BlockPlaceEvent event) {
+
+        if (unPlaceableBlocks.contains(event.getItemInHand())) {
+            event.getPlayer().sendMessage(Component.text().content("You cannot place shield upgrades!").color(TextColor.color(255, 100, 100)).build());
+            event.setCancelled(true);
+        }
+
+    }
+
+}

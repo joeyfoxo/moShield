@@ -20,9 +20,7 @@ public class SlimeUpgrade {
                 .content("Slime Shield Upgrade")
                 .color(TextColor.color(73, 207, 0))
                 .decoration(TextDecoration.ITALIC, false).build());
-
-        meta.addEnchant(Enchantment.LUCK, 1, true);
-        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        
         itemStack.setItemMeta(meta);
 
         return itemStack;

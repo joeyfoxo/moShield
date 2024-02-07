@@ -19,7 +19,6 @@ public class SpikedShield extends Shield {
 
     NamespacedKey key;
 
-
     public SpikedShield(ShieldType shieldType, Component title, NamespacedKey key) {
         super(shieldType, title);
         this.key = key;

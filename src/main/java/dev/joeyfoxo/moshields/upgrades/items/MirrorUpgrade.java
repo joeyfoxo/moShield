@@ -21,8 +21,6 @@ public class MirrorUpgrade {
                 .color(TextColor.color(83, 98, 100))
                 .decoration(TextDecoration.ITALIC, false).build());
 
-        meta.addEnchant(Enchantment.LUCK, 1, true);
-        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         itemStack.setItemMeta(meta);
 
         return itemStack;

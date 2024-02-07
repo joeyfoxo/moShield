@@ -5,7 +5,9 @@ import dev.joeyfoxo.moshields.manager.DurabilityHandler;
 import dev.joeyfoxo.moshields.manager.FeatureHandler;
 import dev.joeyfoxo.moshields.manager.ShieldManager;
 import dev.joeyfoxo.moshields.manager.Cooldown;
-import dev.joeyfoxo.moshields.upgrades.GUI.ShieldUpgrade;
+import dev.joeyfoxo.moshields.upgrades.handler.UpgradeListener;
+import dev.joeyfoxo.moshields.upgrades.items.fragments.EchoFragment;
+import dev.joeyfoxo.moshields.upgrades.items.fragments.ReinforcedFragment;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class MoShields extends JavaPlugin {
@@ -20,7 +22,12 @@ public final class MoShields extends JavaPlugin {
         new StructureListener();
 
         //Upgradeable Shields
-        new ShieldUpgrade();
+        new UpgradeListener();
+
+
+        //Fragments
+        new ReinforcedFragment();
+        new EchoFragment();
 
     }
 

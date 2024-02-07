@@ -1,4 +1,4 @@
-package dev.joeyfoxo.moshields.upgrades.items;
+package dev.joeyfoxo.moshields.upgrades.items.reinforced;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
@@ -13,16 +13,14 @@ public class ReinforcedUpgrade {
 
     public static ItemStack getUpgrade() {
 
-        ItemStack itemStack = new ItemStack(Material.IRON_BLOCK);
+        ItemStack itemStack = new ItemStack(Material.IRON_INGOT);
         ItemMeta meta = itemStack.getItemMeta();
 
         meta.displayName(Component.text()
                 .content("Reinforced Shield Upgrade")
-                .color(TextColor.color(83, 98, 100))
+                .color(TextColor.color(182, 201, 203))
                 .decoration(TextDecoration.ITALIC, false).build());
 
-        meta.addEnchant(Enchantment.LUCK, 1, true);
-        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         itemStack.setItemMeta(meta);
 
         return itemStack;

@@ -21,8 +21,6 @@ public class SpikedUpgrade {
                 .color(TextColor.color(54, 54, 54))
                 .decoration(TextDecoration.ITALIC, false).build());
 
-        meta.addEnchant(Enchantment.LUCK, 1, true);
-        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         itemStack.setItemMeta(meta);
 
         return itemStack;

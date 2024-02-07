@@ -21,8 +21,6 @@ public class EchoUpgrade {
                 .color(TextColor.color(0, 153, 105))
                 .decoration(TextDecoration.ITALIC, false).build());
 
-        meta.addEnchant(Enchantment.LUCK, 1, true);
-        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         itemStack.setItemMeta(meta);
 
         return itemStack;
