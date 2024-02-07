@@ -162,12 +162,17 @@ public class FeatureHandler implements Listener {
         if (!UtilClass.isHoldingCustomShield(player)) {
             playersSinking.remove(player.getUniqueId());
             playersSlowed.remove(player.getUniqueId());
+            playersBlinded.remove(player.getUniqueId());
         }
 
         for (ShieldType shieldType : UtilClass.getHeldShields(player)) {
 
             if (getShieldAbilities(shieldType).contains(Abilities.SLOW)) {
                 playersSlowed.add(player.getUniqueId());
+            }
+
+            if (getShieldAbilities(shieldType).contains(Abilities.BLINDNESS)) {
+                playersBlinded.add(player.getUniqueId());
             }
 
             if (getShieldAbilities(shieldType).contains(Abilities.SINK) && (player.isUnderWater() || player.isInWater())) {

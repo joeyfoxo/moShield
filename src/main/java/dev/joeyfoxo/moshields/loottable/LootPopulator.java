@@ -10,7 +10,7 @@ import java.util.List;
 
 public class LootPopulator {
 
-    public void populateLoot(Inventory inventory, ItemStack upgrade, double chance) {
+    public static void populateLoot(Inventory inventory, ItemStack upgrade, double chance) {
 
         if (!UtilClass.percentChance(chance)) {
             return;
@@ -24,7 +24,7 @@ public class LootPopulator {
 
     }
 
-    public List<Integer> getFreeSlotIndices(Inventory inventory) {
+    public static List<Integer> getFreeSlotIndices(Inventory inventory) {
         List<Integer> freeSlotIndices = new ArrayList<>();
         ItemStack[] contents = inventory.getContents();
         for (int i = 0; i < contents.length; i++) {

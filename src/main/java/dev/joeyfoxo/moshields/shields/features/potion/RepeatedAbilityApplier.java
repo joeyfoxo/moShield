@@ -38,11 +38,13 @@ public class RepeatedAbilityApplier implements Ability {
                     }
                 });
 
+
+                //TODO BROKEN FIX BLINDNESS
                 Features.playersBlinded.forEach(uuid -> {
                     Player player = Bukkit.getPlayer(uuid);
 
                     if (player != null) {
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 2, 1, true, false));
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 5, 0, true, false));
                     }
                 });
 
@@ -50,7 +52,7 @@ public class RepeatedAbilityApplier implements Ability {
                     Player player = Bukkit.getPlayer(uuid);
 
                     if (player != null) {
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 2, 1, true, false));
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 5, 0, true, false));
                     }
                 });
 

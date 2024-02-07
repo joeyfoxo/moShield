@@ -24,7 +24,8 @@ public class UtilClass {
 
 
     public static Boolean percentChance(double chance) {
-        return (Math.random() <= chance);
+
+        return (Math.random() <= chance / 100);
     }
     public static void setCustomModelID(ItemMeta meta, NamespacedKey key, ShieldType type) {
         meta.getPersistentDataContainer().set(key, PersistentDataType.INTEGER, type.ordinal());

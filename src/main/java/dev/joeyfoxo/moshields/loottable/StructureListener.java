@@ -2,13 +2,19 @@ package dev.joeyfoxo.moshields.loottable;
 
 import dev.joeyfoxo.moshields.MoShields;
 import dev.joeyfoxo.moshields.upgrades.items.EchoUpgrade;
+import dev.joeyfoxo.moshields.upgrades.items.ReinforcedUpgrade;
 import dev.joeyfoxo.moshields.upgrades.items.SlimeUpgrade;
-import dev.joeyfoxo.moshields.upgrades.items.SpikedUpgrade;
-import org.bukkit.*;
+import io.papermc.paper.math.Position;
+import net.kyori.adventure.text.BlockNBTComponent;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Registry;
+import org.bukkit.World;
 import org.bukkit.block.Chest;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.generator.structure.Structure;
 import org.bukkit.generator.structure.StructureType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -20,47 +26,40 @@ public class StructureListener implements Listener {
         Bukkit.getPluginManager().registerEvents(this, JavaPlugin.getPlugin(MoShields.class));
     }
 
-    public boolean isStructureNearby(Location location, StructureType structure, int radius) {
-        World world = location.getWorld();
-        StructureSearchResult structureSearchResult = world.locateNearestStructure(location, structure, radius, false);
-
-        return structureSearchResult != null;
-    }
-
     @EventHandler
     public void playerOpenChest(PlayerInteractEvent event) {
-
-        LootPopulator populator = new LootPopulator();
 
         if (event.getClickedBlock() == null) {
             return;
         }
 
+
         if (event.getClickedBlock().getState() instanceof Chest chest && event.getAction().isRightClick()) {
 
-//            if (chest.hasBeenFilled()) {
-//                return;
-//            }
+            if (chest.hasBeenFilled()) {
+                return;
+            }
 
             Location chestLocation = chest.getLocation();
             Inventory inventory = chest.getBlockInventory();
+            World world = chestLocation.getWorld();
 
-            System.out.println(isStructureNearby(chestLocation, Registry.STRUCTURE_TYPE.get(NamespacedKey.minecraft("ANCIENT_CITY")), 10));
 
-            if (isStructureNearby(chestLocation, Registry.STRUCTURE_TYPE.get(NamespacedKey.minecraft("ANCIENT_CITY")), 10)) {
-                populator.populateLoot(inventory, EchoUpgrade.getUpgrade(), 1);
+            if (world.hasStructureAt(Position.block(chestLocation), Structure.ANCIENT_CITY)) {
+                LootPopulator.populateLoot(inventory, EchoUpgrade.getUpgrade(), 0.05);
                 return;
             }
 
-            if (isStructureNearby(chestLocation, StructureType.JUNGLE_TEMPLE, 10)) {
-                populator.populateLoot(inventory, SlimeUpgrade.getUpgrade(), 0.04);
+            if (world.hasStructureAt(Position.block(chestLocation), Structure.JUNGLE_PYRAMID)) {
+                LootPopulator.populateLoot(inventory, SlimeUpgrade.getUpgrade(), 0.1);
                 return;
             }
 
-            if (isStructureNearby(chestLocation, Registry.STRUCTURE_TYPE.get(NamespacedKey.minecraft("BASTION_REMNANT")), 10)) {
-                populator.populateLoot(inventory, SpikedUpgrade.getUpgrade(), 0.06);
+            if (world.hasStructureAt(Position.block(chestLocation), Structure.STRONGHOLD)) {
+                LootPopulator.populateLoot(inventory, ReinforcedUpgrade.getUpgrade(), 0.1);
                 return;
             }
+
 
         }
     }
