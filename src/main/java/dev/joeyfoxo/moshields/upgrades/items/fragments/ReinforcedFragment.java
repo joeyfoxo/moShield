@@ -27,7 +27,7 @@ public class ReinforcedFragment extends Fragments {
 
         meta.displayName(Component.text()
                 .content("Reinforced Fragment")
-                .color(TextColor.color(182, 201, 203))
+                .color(TextColor.color(87, 91, 91))
                 .decoration(TextDecoration.ITALIC, false).build());
 
         itemStack.setItemMeta(meta);

@@ -54,6 +54,8 @@ public class ReinforcedShield extends Shield {
                 .color(TextColor.color(100, 100, 100))
                 .decoration(TextDecoration.ITALIC, false).build());
 
+        meta.setCustomModelData(1);
+
         meta.lore(lore);
 
     }

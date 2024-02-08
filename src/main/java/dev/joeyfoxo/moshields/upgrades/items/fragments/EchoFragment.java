@@ -2,8 +2,8 @@ package dev.joeyfoxo.moshields.upgrades.items.fragments;
 
 import dev.joeyfoxo.moshields.MoShields;
 import dev.joeyfoxo.moshields.upgrades.items.EchoUpgrade;
-import dev.joeyfoxo.moshields.upgrades.items.reinforced.ReinforcedUpgrade;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
@@ -14,6 +14,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.ArrayList;
 
 public class EchoFragment extends Fragments {
 
@@ -30,6 +32,10 @@ public class EchoFragment extends Fragments {
                 .content("Echo Fragment")
                 .color(TextColor.color(0, 153, 105))
                 .decoration(TextDecoration.ITALIC, false).build());
+
+
+        meta.addEnchant(Enchantment.LUCK, 1, true);
+        meta.addItemFlags(ItemFlag.values());
 
         itemStack.setItemMeta(meta);
 
